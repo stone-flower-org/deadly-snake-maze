@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base href="/" />
+    <meta charset="utf-8" />
+    <link
+      rel="icon"
+      href="${PUBLIC_URL}static/img/favicon.ico?v=${APP_VERSION}"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="theme-color"
+      content="#000000"
+    />
+    <meta
+      name="description"
+      content="3D browser game written using Three.js"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="${PUBLIC_URL}static/img/apple-touch-icon.png?v=${APP_VERSION}"
+    />
+    <link
+      rel="manifest"
+      href="${PUBLIC_URL}manifest.json?v=${APP_VERSION}"
+    />
+    <title>Deadly Snake Maze</title>
+
+    <meta data-app-name="${APP_NAME}" />
+    <meta data-app-version="${APP_VERSION}" />
+  </head>
+
+  <body>
+    <div id="app">
+      ${APP_BOOT_MODAL}
+    </div>
+    <script
+      type="module"
+      src="/src/index.tsx"
+    ></script>
+  </body>
+</html>

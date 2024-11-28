@@ -1,0 +1,12 @@
+/* Initial styles before app renders */
+@use '@/src/modules/app/ui/components/AppBootModal/styles.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100vh;
+  width: 100vw;
+}

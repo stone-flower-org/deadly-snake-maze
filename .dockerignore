@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Project
+/*
+configs/config.local.json
+
+!configs
+!docker
+!public
+!scripts
+!src
+!.dockerignore
+!Dockerfile
+!index.html
+!package.json
+!tsconfig.json
+!tsconfig.production.json
+!vite.config.js
+!vitest-setup.js
+!vitest.config.js
+!yarn.lock

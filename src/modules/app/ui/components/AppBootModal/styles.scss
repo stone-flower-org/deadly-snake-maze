@@ -1,0 +1,89 @@
+@use 'sass:color';
+
+@keyframes progress-bar-background-animation {
+    from {
+        transform: translate(-100%, 0);
+    }
+    to {
+        transform: translate(100%, 0);
+    }
+}
+
+.boot-modal {
+    --color: white;
+    --background-color: black;
+    --progress: 0%;
+    --progress-track-color: white;
+    --progress-track-background: color-mix(in srgb, var(--background-color), var(--progress-track-color));
+    
+    align-items: center;
+    background: var(--background-color);
+    color: var(--color);
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 9999;
+
+    &--closing {
+        opacity: 0;
+        transition: opacity 0.2s linear 0.2s;
+    }
+
+    & .boot-modal__content {
+        align-items: center;
+        display: flex;
+        flex-flow: column;
+        gap: 16px;
+        max-width: 320px;
+        width: 100%;
+    }
+
+    & .boot-modal__noscript {
+        font-size: 1rem;
+    }
+
+    & .boot-modal__logo {
+        max-width: 128px;
+        width: 100%;
+    }
+
+    & .boot-modal__logo-img {
+        width: 100%;
+    }
+
+    & .boot-modal__progress {
+        width: 100%;
+    }
+
+    & .boot-modal__progress-bar {
+        display: block;
+        height: 2px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    & .boot-modal__progress-bar-background {
+        animation: linear 2s infinite 0s progress-bar-background-animation;
+        background: linear-gradient(90deg, var(--background-color) 0%, var(--progress-track-background) 50%, var(--background-color) 100%);
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 0;
+    }
+
+    & .boot-modal__progress-bar-track {
+        background: var(--progress-track-color);
+        height: 100%;
+        position: absolute;
+        top: 0;
+        transition: transform 0.2s linear;
+        transform: translate(calc(-100% + var(--progress)), 0);
+        width: 100%;
+        z-index: 1;
+    }
+}

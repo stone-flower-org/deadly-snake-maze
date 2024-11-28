@@ -1,0 +1,25 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "downlevelIteration": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "es2020",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./dist/",
+    "paths": {
+      "@/src/*": ["./src/*"],
+      "@/public/*": ["./public/*"]
+    },
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "target": "ES5",
+    "typeRoots": ["src/types/global", "src/types/overrides", "./node_modules/@types"]
+  },
+  "include": ["src/**/*", "public/**/*"]
+}
