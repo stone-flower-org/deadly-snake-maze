@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="100" fill="balck" />
+  <g transform="translate(0 10) rotate(45 90 90) scale(0.9)">
+    <!--  Target -->
+    <circle cx="100"
+            cy="0"
+            r="15"
+            fill="yellow"
+            stroke="white"
+            stroke-width="1" />
+    <!-- Snake Body -->
+    <polygon points="92.5,20 55,105 70,95" 
+               fill="#00b300"
+               stroke="white" 
+               stroke-width="1" />
+    <polygon points="70,95 145,95 135,105 55,105" 
+               fill="#006600"
+               stroke="white" 
+               stroke-width="1" />
+    <polygon points="145,95 100,200 125,105" 
+             fill="#001900"
+             stroke="white" 
+             stroke-width="1" />
+    <!-- Snake Head -->
+    <polygon points="92.5,20 65,60 90,60" 
+             fill="#00ff00"
+             stroke="white" 
+             stroke-width="1" />
+  </g>
+</svg>

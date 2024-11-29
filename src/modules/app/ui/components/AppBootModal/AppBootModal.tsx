@@ -44,7 +44,7 @@ export const AppBootModal = ({ progress = 0 }: AppBootModalProps) => {
           <img
             alt="Logo"
             className="boot-modal__logo-img"
-            src="static/img/logo.svg"
+            src="static/img/logo/logo.svg"
           />
         </div>
         <div className="boot-modal__progress">

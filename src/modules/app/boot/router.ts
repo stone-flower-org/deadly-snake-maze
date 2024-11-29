@@ -3,7 +3,7 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 
 import { ThrowRouteError } from '@/src/modules/common/ui/components/ThrowRouteError';
 import { createRoutesStore } from '@/src/modules/common/utils/react-router-dom';
-import { routes as exampleRoutes } from '@/src/modules/example/boot';
+import { routes as exampleRoutes } from '@/src/modules/main/boot';
 
 export const routes: RouteObject[] = [
   {

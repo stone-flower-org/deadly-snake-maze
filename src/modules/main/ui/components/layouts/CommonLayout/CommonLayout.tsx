@@ -10,7 +10,7 @@ export const CommonLayout = ({ children }: CommonLayoutProps) => (
   <StyledCommonLayoutContainer>
     <StyledCommonLayoutHeader>
       <h1>
-        <LogoIcon fontSize="inherit" /> React Template
+        <LogoIcon fontSize="inherit" /> Deadly Snake Maze
       </h1>
     </StyledCommonLayoutHeader>
     <StyledCommonLayoutBody>{children}</StyledCommonLayoutBody>

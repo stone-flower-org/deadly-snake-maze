@@ -5,7 +5,7 @@ export const routes: RouteObject[] = [
   {
     path: '',
     lazy: () =>
-      import('@/src/modules/example/ui/components/layouts/CommonLayout').then((module) => ({
+      import('@/src/modules/main/ui/components/layouts/CommonLayout').then((module) => ({
         Component: () => createElement(module.default, undefined, createElement(Outlet)),
       })),
     children: [
@@ -13,7 +13,7 @@ export const routes: RouteObject[] = [
         id: 'index',
         path: '',
         lazy: () =>
-          import('@/src/modules/example/ui/components/pages/IndexPage').then((module) => ({
+          import('@/src/modules/main/ui/components/pages/IndexPage').then((module) => ({
             Component: module.default,
           })),
       },

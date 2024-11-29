@@ -4,30 +4,6 @@
 
 Deadly Snake Maze is a 3D browser game written using Three.js
 
-### The Copying Checklist
-
-- [x] Clone the template
-- [x] Update package.json
-  - [x] name
-  - [x] version
-  - [x] description
-  - [x] repository
-  - [x] author
-  - [x] license
-  - [x] private
-- [x] Update index.html
-  - [x] Title
-  - [x] Description
-- [ ] Replace logo images in `./public/static/img`
-- [x] Update `./public/manifest.json`
-  - [x] name
-  - [x] short_name
-- [x] Update docs/pull_request_template.md
-- [ ] Update README.md
-  - [x] Update title
-  - [x] Update description
-  - [ ] Remove The Copying Checklist
-
 ## Installation
 
 ### Using Docker

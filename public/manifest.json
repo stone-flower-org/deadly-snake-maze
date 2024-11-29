@@ -3,17 +3,17 @@
   "name": "Deadly Snake Maze",
   "icons": [
     {
-      "src": "static/img/favicon.ico",
+      "src": "static/img/logo/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "static/img/logo-192.png",
+      "src": "static/img/logo/logo-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "static/img/logo-512.png",
+      "src": "static/img/logo/logo-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
