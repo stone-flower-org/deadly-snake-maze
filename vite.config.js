@@ -18,7 +18,6 @@ const APP_VERSION = process.env.APP_VERSION || packageJson.version;
 const DEV_HOST = process.env.DEV_HOST || 'localhost';
 const DEV_PORT = process.env.DEV_PORT || 3000;
 const DEV_MODE = process.env.DEV_MODE || 'development';
-const DEV_MOCK_API = process.env.DEV_MOCK_API || false;
 
 const IS_DEV = DEV_MODE === 'development';
 const OUT_DIR = 'dist';
@@ -41,7 +40,6 @@ export default defineConfig(() => ({
   define: {
     'process.env.APP_NAME': JSON.stringify(String(APP_NAME)),
     'process.env.APP_VERSION': JSON.stringify(String(APP_VERSION)),
-    'process.env.DEV_MOCK_API': JSON.stringify(String(DEV_MOCK_API)),
   },
   logLevel: IS_DEV ? 'info' : 'error',
   mode: DEV_MODE,

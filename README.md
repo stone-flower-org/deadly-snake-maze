@@ -94,7 +94,6 @@ Runs dev server on given port with given host name. Should be used during develo
 1. DEV_MODE - environment. Can be `development` and `production`. By default - `development`
 2. DEV_HOST - dev server's host name. By default - `localhost`
 3. DEV_PORT - dev server's port. By default - `3000`
-4. DEV_MOCK_API - use mocked data instead any API calls
 
 ### yarn test
 

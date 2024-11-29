@@ -1,9 +1,5 @@
 import { Router } from '@remix-run/router';
 import { Axios } from 'axios';
-// eslint-disable-next-line import/no-unresolved
-import { SetupWorker } from 'msw/lib/browser';
-// eslint-disable-next-line import/no-unresolved
-import { SetupServer } from 'msw/lib/node';
 
 import { configsProvider } from '@/src/modules/app/boot/configs';
 import { luxonProvider } from '@/src/modules/app/boot/luxon';
@@ -16,7 +12,6 @@ export interface AppServices {
   configs: AppConfigs;
   date: ReturnType<typeof luxonProvider.get>;
   http: Axios;
-  server: SetupWorker | SetupServer;
   store: RootStore;
   router: Router;
   routesStore: RoutesStore;
