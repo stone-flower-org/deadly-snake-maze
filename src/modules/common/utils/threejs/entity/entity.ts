@@ -1,7 +1,7 @@
+import { type IEventProducer } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
-import { IAnimated } from '@/src/modules/common/utils/threejs/animated';
-import { IEventProducer } from '@/src/modules/common/utils/threejs/event-producer';
+import { type IAnimated } from '@/src/modules/common/utils/threejs/animated';
 
 export type IView = THREE.Object3D;
 

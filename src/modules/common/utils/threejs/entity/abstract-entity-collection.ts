@@ -1,7 +1,10 @@
-import { createAutoincrementIdGenerator, createContextSaver } from '@stone-flower-org/js-utils';
-
-import { ITick } from '@/src/modules/common/utils/threejs/time';
-import { Collection, ICollection } from '@/src/modules/common/utils/threejs/utils';
+import {
+  Collection,
+  createAutoincrementIdGenerator,
+  createContextSaver,
+  type ITick,
+  type ICollection,
+} from '@stone-flower-org/js-utils';
 
 import { AbstractEntity } from './abstract-entity';
 import { IEntity } from './entity';

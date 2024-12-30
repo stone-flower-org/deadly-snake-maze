@@ -1,7 +1,6 @@
+import { type ITick } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-
-import { ITick } from '@/src/modules/common/utils/threejs/time';
 
 export type Animations = Record<string, THREE.AnimationAction>;
 

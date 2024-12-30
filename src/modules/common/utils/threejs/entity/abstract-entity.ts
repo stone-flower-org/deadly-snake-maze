@@ -1,7 +1,5 @@
-import { createAutoincrementIdGenerator } from '@stone-flower-org/js-utils';
+import { createAutoincrementIdGenerator, type ITick, WithEventProducer } from '@stone-flower-org/js-utils';
 
-import { WithEventProducer } from '@/src/modules/common/utils/threejs/event-producer';
-import { ITick } from '@/src/modules/common/utils/threejs/time';
 import { Object3DUtils } from '@/src/modules/common/utils/threejs/utils';
 
 import { IEntity, IView } from './entity';
@@ -34,7 +32,7 @@ export abstract class AbstractEntity<V extends IView = IView>
   }
 
   delete() {
-    this.emit(AbstractEntity.EVENTS.delete, this);
+    this._eventBus.emit(AbstractEntity.EVENTS.delete, this);
     Object3DUtils.instance().deleteObject(this.getView());
   }
 

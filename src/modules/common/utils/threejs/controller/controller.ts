@@ -1,4 +1,4 @@
-import { IEventProducer } from '@/src/modules/common/utils/threejs/event-producer';
+import { type IEventProducer } from '@stone-flower-org/js-utils';
 
 export interface IController extends IEventProducer {
   id: string;

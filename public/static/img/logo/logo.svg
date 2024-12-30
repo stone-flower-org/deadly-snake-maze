@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <!-- Background -->
-  <circle cx="100" cy="100" r="100" fill="balck" />
+  <circle cx="100" cy="100" r="100" fill="black" />
   <g transform="translate(0 10) rotate(45 90 90) scale(0.9)">
     <!--  Target -->
     <circle cx="100"

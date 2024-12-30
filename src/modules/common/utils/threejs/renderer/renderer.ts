@@ -1,14 +1,15 @@
+import { type IEventProducer, type ITick, WithEventProducer } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
-import { IEventProducer, WithEventProducer } from '@/src/modules/common/utils/threejs/event-producer';
-import { IGlobalState } from '@/src/modules/common/utils/threejs/global-state';
+import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
 
 import type { WebGLRendererParameters } from 'three';
 
 export type IRendererEngine = THREE.WebGLRenderer;
 
 export interface IRenderer extends IEventProducer {
-  render(state: IGlobalState): void;
+  boot(ctx: IThreejsCtx): Promise<void>;
+  render(tick: ITick): void;
   getEngine(): IRendererEngine;
   delete(): void;
 }
@@ -16,6 +17,7 @@ export interface IRenderer extends IEventProducer {
 export interface IRendererOptions extends WebGLRendererParameters {}
 
 export class Renderer extends WithEventProducer(Function) implements IRenderer {
+  private _ctx?: IThreejsCtx;
   private _engine: THREE.WebGLRenderer;
 
   static get EVENTS() {
@@ -34,15 +36,20 @@ export class Renderer extends WithEventProducer(Function) implements IRenderer {
     this._engine = new THREE.WebGLRenderer(options);
   }
 
+  async boot(ctx: IThreejsCtx) {
+    this._ctx = ctx;
+  }
+
   getEngine() {
     return this._engine;
   }
 
-  render(state: IGlobalState) {
-    this.emit(Renderer.EVENTS.beforerender, this);
+  render(_: ITick) {
+    this._eventBus.emit(Renderer.EVENTS.beforerender, this);
 
-    const view = state.scene?.getView();
-    const camera = state.scene?.getCamera()?.getView();
+    const scene = this._ctx?.store.getScene();
+    const view = scene?.getView();
+    const camera = this._ctx?.store.getScene()?.getCamera()?.getView();
 
     if (!view || !camera) {
       this._engine.clear(true, true, true);
@@ -51,7 +58,7 @@ export class Renderer extends WithEventProducer(Function) implements IRenderer {
 
     this._engine.render(view, camera);
 
-    this.emit(Renderer.EVENTS.afterrender, this);
+    this._eventBus.emit(Renderer.EVENTS.afterrender, this);
   }
 
   delete() {

@@ -1,48 +1,48 @@
 import { createContextSaver } from '@stone-flower-org/js-utils';
 
 import { AbstractController } from '@/src/modules/common/utils/threejs/controller';
-import { IGlobalState } from '@/src/modules/common/utils/threejs/global-state';
+import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
 
 export interface ICursorControllerOptions {
-  globalState: IGlobalState;
+  ctx: IThreejsCtx;
 }
 
 export class CursorController extends AbstractController {
-  private _globalState: IGlobalState;
+  private _ctx: IThreejsCtx;
   protected _binder = createContextSaver(this);
 
-  constructor({ globalState }: ICursorControllerOptions) {
+  constructor({ ctx }: ICursorControllerOptions) {
     super();
-    this._globalState = globalState;
+    this._ctx = ctx;
   }
 
   async init() {
     await super.init();
-    this._globalState.canvas.addEventListener('mousemove', this._binder.useFunc(this.onMouseMove));
-    this._globalState.canvas.addEventListener('mouseup', this._binder.useFunc(this.onMouseUp));
-    this._globalState.canvas.addEventListener('mousedown', this._binder.useFunc(this.onMouseDown));
+    this._ctx.canvas.addEventListener('mousemove', this._binder.useFunc(this.onMouseMove));
+    this._ctx.canvas.addEventListener('mouseup', this._binder.useFunc(this.onMouseUp));
+    this._ctx.canvas.addEventListener('mousedown', this._binder.useFunc(this.onMouseDown));
   }
 
   onMouseMove(e: MouseEvent) {
-    const [width, height] = this._globalState.screen.getSize();
-    this._globalState.cursor.setPosition({
-      x: (e.clientX / width) * 2 - 1,
-      y: -(e.clientY / height) * 2 + 1,
+    const screen = this._ctx.store.getScreen();
+    this._ctx.store.setCursorPosition({
+      x: (e.clientX / screen.width) * 2 - 1,
+      y: -(e.clientY / screen.height) * 2 + 1,
     });
   }
 
   onMouseUp() {
-    this._globalState.cursor.setMousedown(false);
+    this._ctx.store.setCursorMousedown(false);
   }
 
   onMouseDown() {
-    this._globalState.cursor.setMousedown(true);
+    this._ctx.store.setCursorMousedown(true);
   }
 
   delete() {
     super.delete();
-    this._globalState.canvas.removeEventListener('mousemove', this._binder.useFunc(this.onMouseMove));
-    this._globalState.canvas.removeEventListener('mouseup', this._binder.useFunc(this.onMouseUp));
-    this._globalState.canvas.removeEventListener('mousedown', this._binder.useFunc(this.onMouseDown));
+    this._ctx.canvas.removeEventListener('mousemove', this._binder.useFunc(this.onMouseMove));
+    this._ctx.canvas.removeEventListener('mouseup', this._binder.useFunc(this.onMouseUp));
+    this._ctx.canvas.removeEventListener('mousedown', this._binder.useFunc(this.onMouseDown));
   }
 }

@@ -2,7 +2,7 @@ import {
   AbstractControllerCollection,
   IControllerCollectionOptions,
 } from '@/src/modules/common/utils/threejs/controller';
-import { IGlobalState } from '@/src/modules/common/utils/threejs/global-state';
+import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
 
 import { CameraController } from './camera-controller';
 import { CursorController } from './cursor-controller';
@@ -10,24 +10,24 @@ import { RendererController } from './renderer-controller';
 import { ScreenController } from './screen-controller';
 
 export interface ICoreControllersCollectionOptions extends IControllerCollectionOptions {
-  globalState: IGlobalState;
+  ctx: IThreejsCtx;
 }
 
 export class CoreControllerCollection extends AbstractControllerCollection {
-  protected _globalState: IGlobalState;
+  protected _ctx: IThreejsCtx;
 
-  constructor({ globalState, ...rest }: ICoreControllersCollectionOptions) {
+  constructor({ ctx, ...rest }: ICoreControllersCollectionOptions) {
     super({ ...rest });
-    this._globalState = globalState;
+    this._ctx = ctx;
     this.addControllers(Object.values(this.getCoreControllers()));
   }
 
   protected getCoreControllers() {
     return {
-      cameraController: new CameraController({ globalState: this._globalState }),
-      cursorContoller: new CursorController({ globalState: this._globalState }),
-      rendererController: new RendererController({ globalState: this._globalState }),
-      screenController: new ScreenController({ globalState: this._globalState }),
+      cameraController: new CameraController({ ctx: this._ctx }),
+      cursorContoller: new CursorController({ ctx: this._ctx }),
+      rendererController: new RendererController({ ctx: this._ctx }),
+      screenController: new ScreenController({ ctx: this._ctx }),
     };
   }
 }

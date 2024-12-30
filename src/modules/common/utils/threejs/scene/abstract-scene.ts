@@ -1,9 +1,8 @@
-import { createAutoincrementIdGenerator } from '@stone-flower-org/js-utils';
+import { createAutoincrementIdGenerator, type ITick } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
 import { ICamera } from '@/src/modules/common/utils/threejs/camera';
 import { SceneEntityCollection } from '@/src/modules/common/utils/threejs/entity';
-import { ITick } from '@/src/modules/common/utils/threejs/time';
 import { Object3DUtils } from '@/src/modules/common/utils/threejs/utils';
 
 import { IScene, ISceneOptions, ISceneView } from './scene';

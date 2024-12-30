@@ -1,36 +1,36 @@
 import { createContextSaver } from '@stone-flower-org/js-utils';
 
 import { AbstractController } from '@/src/modules/common/utils/threejs/controller';
-import { IGlobalState } from '@/src/modules/common/utils/threejs/global-state';
-import { Screen } from '@/src/modules/common/utils/threejs/screen';
+import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
+import { ThreejsStore } from '@/src/modules/common/utils/threejs/threejs-store';
 
 export interface ICameraControllerOptions {
-  globalState: IGlobalState;
+  ctx: IThreejsCtx;
 }
 
 export class CameraController extends AbstractController {
-  private _globalState: IGlobalState;
+  private _ctx: IThreejsCtx;
   protected _binder = createContextSaver(this);
 
-  constructor({ globalState }: ICameraControllerOptions) {
+  constructor({ ctx }: ICameraControllerOptions) {
     super();
-    this._globalState = globalState;
+    this._ctx = ctx;
   }
 
   async init() {
     await super.init();
-    this._globalState.screen.on(Screen.EVENTS.resize, this._binder.useFunc(this.onResize));
+    this._ctx.store.on(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onResize));
     this.onResize();
   }
 
   onResize() {
-    const camera = this._globalState.scene?.getCamera();
+    const camera = this._ctx.store.getScene()?.getCamera();
     if (!camera?.isPerspectiveCamera()) return;
-    camera.setParams({ aspect: this._globalState.screen.getAspectRatio() });
+    camera.setParams({ aspect: this._ctx.store.getScreen().aspectRatio });
   }
 
   delete() {
     super.delete();
-    this._globalState.screen.off(Screen.EVENTS.resize, this._binder.useFunc(this.onResize));
+    this._ctx.store.off(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onResize));
   }
 }

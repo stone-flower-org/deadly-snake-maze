@@ -1,6 +1,4 @@
-import { createContextSaver } from '@stone-flower-org/js-utils';
-
-import { Collection, ICollection } from '@/src/modules/common/utils/threejs/utils';
+import { Collection, createContextSaver, type ICollection } from '@stone-flower-org/js-utils';
 
 import { AbstractController } from './abstract-controller';
 import { IController } from './controller';

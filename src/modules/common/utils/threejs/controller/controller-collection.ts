@@ -1,4 +1,4 @@
-import { ICollection } from '@/src/modules/common/utils/threejs/utils';
+import { type ICollection } from '@stone-flower-org/js-utils';
 
 import { IController } from './controller';
 

@@ -2,38 +2,39 @@ import { createContextSaver } from '@stone-flower-org/js-utils';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { AbstractController } from '@/src/modules/common/utils/threejs/controller';
-import { GlobalState, IGlobalState } from '@/src/modules/common/utils/threejs/global-state';
 import { Renderer } from '@/src/modules/common/utils/threejs/renderer';
+import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
+import { ThreejsStore } from '@/src/modules/common/utils/threejs/threejs-store';
 
 export interface IOrbitalControllerOptions {
-  globalState: IGlobalState;
+  ctx: IThreejsCtx;
 }
 
 export class OrbitalController extends AbstractController {
   private _orbitalControl?: OrbitControls;
-  private _globalState: IGlobalState;
+  private _ctx: IThreejsCtx;
   protected _binder = createContextSaver(this);
 
-  constructor({ globalState }: IOrbitalControllerOptions) {
+  constructor({ ctx }: IOrbitalControllerOptions) {
     super();
-    this._globalState = globalState;
+    this._ctx = ctx;
   }
 
   async init() {
     await super.init();
-    this._globalState.on(GlobalState.EVENTS.scenechange, this._binder.useFunc(this.onSceneChange));
-    this._globalState.renderer.on(Renderer.EVENTS.beforerender, this._binder.useFunc(this.onTick));
+    this._ctx.store.on(ThreejsStore.EVENTS.scenechange, this._binder.useFunc(this.onSceneChange));
+    this._ctx.renderer.on(Renderer.EVENTS.beforerender, this._binder.useFunc(this.onTick));
     this.onSceneChange();
   }
 
   onSceneChange() {
     this._orbitalControl?.dispose();
 
-    const camera = this._globalState.scene?.getCamera()?.getView();
+    const camera = this._ctx.store.getScene()?.getCamera()?.getView();
 
     if (!camera) return;
 
-    this._orbitalControl = new OrbitControls(camera, this._globalState.canvas);
+    this._orbitalControl = new OrbitControls(camera, this._ctx.canvas);
     this._orbitalControl.enableDamping = true;
   }
 
@@ -43,8 +44,8 @@ export class OrbitalController extends AbstractController {
 
   delete() {
     super.delete();
-    this._globalState.off(GlobalState.EVENTS.scenechange, this._binder.useFunc(this.onSceneChange));
-    this._globalState.renderer.off(Renderer.EVENTS.beforerender, this._binder.useFunc(this.onTick));
+    this._ctx.store.off(ThreejsStore.EVENTS.scenechange, this._binder.useFunc(this.onSceneChange));
+    this._ctx.renderer.off(Renderer.EVENTS.beforerender, this._binder.useFunc(this.onTick));
     this._orbitalControl?.dispose();
   }
 }

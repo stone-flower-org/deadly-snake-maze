@@ -1,4 +1,4 @@
-import { WithEventProducer } from '@/src/modules/common/utils/threejs/event-producer';
+import { WithEventProducer } from '@stone-flower-org/js-utils';
 
 import { IController } from './controller';
 
@@ -21,7 +21,7 @@ export abstract class AbstractController extends WithEventProducer(Function) imp
   }
 
   delete() {
-    this.emit(AbstractController.EVENTS.delete, this);
+    this._eventBus.emit(AbstractController.EVENTS.delete, this);
   }
 
   protected _generateId(): string {
