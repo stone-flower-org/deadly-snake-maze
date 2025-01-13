@@ -12,7 +12,7 @@ import { luxonProvider } from './luxon';
 import { routerProvider, routesStoreProvider } from './router';
 import { storeProvider } from './store';
 
-export const app = AppContainer.createFromFunc<AppServices>(() => {
+export const app = new AppContainer<AppServices>(() => {
   const appEl = document.getElementById(APP_ELEMENT_ID);
   if (!appEl) throw new Error(`Couldn't find #${APP_ELEMENT_ID} element`);
   createRoot(appEl).render(createElement(AppComponent));

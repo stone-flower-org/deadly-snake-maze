@@ -1,13 +1,11 @@
-import { type ICollection } from '@stone-flower-org/js-utils';
-
 import { IController } from './controller';
 
-export interface IControllerCollection<T extends IController = IController> extends ICollection<T, T['id']> {
-  addControllers(items: T[]): void;
-  removeControllers(ids: T['id'][]): void;
-  deleteContollers(ids: T['id'][]): void;
-  getControllers(ids: T['id'][]): T[];
-  getAllControllers(): T[];
+export interface IControllerCollection extends IController {
+  addControllers(items: IController[]): void;
+  removeControllers(ids: IController['id'][]): void;
+  deleteContollers(ids: IController['id'][]): void;
+  getControllers(ids: IController['id'][]): IController[];
+  getAllControllers(): IController[];
 }
 
 export interface IControllerCollectionOptions<T extends IController = IController> {

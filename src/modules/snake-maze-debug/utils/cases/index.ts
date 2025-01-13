@@ -1,16 +1,10 @@
-import { Game } from '@/src/modules/snake-maze-debug/ui/components/pages/Cases/Game';
-import { MazeGeneration } from '@/src/modules/snake-maze-debug/ui/components/pages/Cases/MazeGeneration';
+import { Sandbox } from '@/src/modules/snake-maze-debug/ui/components/pages/Cases/Sandbox';
 
 export const CASES = [
   {
-    id: 'game',
-    name: 'Game',
-    Component: Game,
-  },
-  {
-    id: 'maze',
-    name: 'Maze',
-    Component: MazeGeneration,
+    id: 'sandbox',
+    name: 'Sandbox',
+    Component: Sandbox,
   },
   {
     id: 'chicken',
@@ -18,18 +12,8 @@ export const CASES = [
     Component: () => null,
   },
   {
-    id: 'chicken-escape',
-    name: 'Chicken Escape',
-    Component: () => null,
-  },
-  {
     id: 'snake',
     name: 'Snake',
-    Component: () => null,
-  },
-  {
-    id: 'snake-collision',
-    name: 'Snake ',
     Component: () => null,
   },
 ];

@@ -1,23 +1,24 @@
 import { type IEventProducer, type ITick, WithEventProducer } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
-import { IThreejsCtx } from '@/src/modules/common/utils/threejs/threejs-ctx';
+import { IThreejsApp } from '@/src/modules/common/utils/threejs/threejs-app';
 
 import type { WebGLRendererParameters } from 'three';
 
 export type IRendererEngine = THREE.WebGLRenderer;
 
 export interface IRenderer extends IEventProducer {
-  boot(ctx: IThreejsCtx): Promise<void>;
   render(tick: ITick): void;
   getEngine(): IRendererEngine;
   delete(): void;
 }
 
-export interface IRendererOptions extends WebGLRendererParameters {}
+export interface IRendererOptions extends WebGLRendererParameters {
+  app: IThreejsApp;
+}
 
 export class Renderer extends WithEventProducer(Function) implements IRenderer {
-  private _ctx?: IThreejsCtx;
+  private _app: IThreejsApp;
   private _engine: THREE.WebGLRenderer;
 
   static get EVENTS() {
@@ -31,13 +32,10 @@ export class Renderer extends WithEventProducer(Function) implements IRenderer {
     return new this(options);
   }
 
-  protected constructor(options: IRendererOptions) {
+  protected constructor({ app, ...rest }: IRendererOptions) {
     super();
-    this._engine = new THREE.WebGLRenderer(options);
-  }
-
-  async boot(ctx: IThreejsCtx) {
-    this._ctx = ctx;
+    this._app = app;
+    this._engine = new THREE.WebGLRenderer(rest);
   }
 
   getEngine() {
@@ -45,16 +43,16 @@ export class Renderer extends WithEventProducer(Function) implements IRenderer {
   }
 
   render(_: ITick) {
-    this._eventBus.emit(Renderer.EVENTS.beforerender, this);
-
-    const scene = this._ctx?.store.getScene();
+    const scene = this._app.getService('store').getScene();
     const view = scene?.getView();
-    const camera = this._ctx?.store.getScene()?.getCamera()?.getView();
+    const camera = this._app.getService('store').getScene()?.getCamera()?.getView();
 
     if (!view || !camera) {
       this._engine.clear(true, true, true);
       return;
     }
+
+    this._eventBus.emit(Renderer.EVENTS.beforerender, this);
 
     this._engine.render(view, camera);
 

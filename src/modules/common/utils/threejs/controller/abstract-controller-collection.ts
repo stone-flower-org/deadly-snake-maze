@@ -2,9 +2,12 @@ import { Collection, createContextSaver, type ICollection } from '@stone-flower-
 
 import { AbstractController } from './abstract-controller';
 import { IController } from './controller';
-import { IControllerCollectionOptions } from './controller-collection';
+import { IControllerCollection, IControllerCollectionOptions } from './controller-collection';
 
-export class AbstractControllerCollection<T extends IController = IController> extends AbstractController {
+export class AbstractControllerCollection<T extends IController = IController>
+  extends AbstractController
+  implements IControllerCollection
+{
   protected _items: ICollection<T, T['id']>;
   protected _binder = createContextSaver(this);
 

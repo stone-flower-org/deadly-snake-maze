@@ -1,5 +1,7 @@
 import { type ICommandManager } from '@stone-flower-org/js-utils';
 
+import { DSMMazeScene } from '@/src/modules/snake-maze-client/utils/scenes';
+
 import { AbstractCommand } from './abstract-command';
 import { AbstractExecutor } from './abstract-executor';
 
@@ -7,7 +9,11 @@ import { AbstractExecutor } from './abstract-executor';
 export class DSMClientInitCommand extends AbstractCommand<undefined> {}
 
 export class DSMGameClientExecutor extends AbstractExecutor {
-  execDSMClientInitCommand(c: DSMClientInitCommand) {
+  async execDSMClientInitCommand(_: DSMClientInitCommand) {
+    const scene = await DSMMazeScene.create({ app: this._app }); // TODO: delete me
+    await scene.init();
+    this._app.getService('store').setScene(scene);
+
     // TODO: write me
     /*
     call init

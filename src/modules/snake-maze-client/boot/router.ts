@@ -1,5 +1,4 @@
-import { createElement } from 'react';
-import { Outlet, RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
 import { SNAKE_MAZE_CLIENT_PAGE_ID } from '@/src/modules/snake-maze-client/constants';
 
@@ -7,16 +6,12 @@ import { SNAKE_MAZE_CLIENT_PAGE_ID } from '@/src/modules/snake-maze-client/const
 export const routes: RouteObject[] = [
   {
     path: '',
-    lazy: () =>
-      import('@/src/modules/main/ui/components/layouts/CommonLayout').then((module) => ({
-        Component: () => createElement(module.default, undefined, createElement(Outlet)),
-      })),
     children: [
       {
         id: SNAKE_MAZE_CLIENT_PAGE_ID,
         path: 'game',
         lazy: () =>
-          import('@/src/modules/main/ui/components/pages/Main').then((module) => ({
+          import('@/src/modules/snake-maze-client/ui/components/routes/Main').then((module) => ({
             Component: module.default,
           })),
       },

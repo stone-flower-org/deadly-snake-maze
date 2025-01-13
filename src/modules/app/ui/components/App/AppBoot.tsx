@@ -1,4 +1,4 @@
-import { createProgress } from '@stone-flower-org/js-utils';
+import { Progress } from '@stone-flower-org/js-utils';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 import { app } from '@/src/modules/app/boot';
@@ -37,7 +37,7 @@ const AppBootContent = ({ children }: AppBootProps) => {
 };
 
 export const AppBoot = (props: AppBootProps) => {
-  const progress = useMemo(() => createProgress({ totalSteps: APP_BOOT_STEPS }), []);
+  const progress = useMemo(() => Progress.create({ totalSteps: APP_BOOT_STEPS }), []);
   return (
     <AppBootProvider progress={progress}>
       <AppBootContent {...props} />

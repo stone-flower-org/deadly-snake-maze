@@ -1,29 +1,25 @@
 import * as THREE from 'three';
 
 import { AbstractScene, Camera, ICamera } from '@/src/modules/common/utils/threejs';
-import { DSMEnvironment } from '@/src/modules/snake-maze-client/utils/environments';
+import { DSMApp } from '@/src/modules/snake-maze-client/utils/dsm-app';
 
 export interface IDSMSceneOptions {
-  env: DSMEnvironment;
+  app: DSMApp;
 }
 
 export abstract class AbstractDSMScene extends AbstractScene {
   _camera: ICamera<THREE.PerspectiveCamera>;
-  _env: DSMEnvironment;
+  _app: DSMApp;
 
-  constructor({ env }: IDSMSceneOptions) {
+  constructor({ app }: IDSMSceneOptions) {
     super();
     this._camera = Camera.createCamera({
       camera: new THREE.PerspectiveCamera(),
     });
-    this._env = env;
+    this._app = app;
   }
 
   getCamera() {
     return this._camera;
-  }
-
-  getEnv() {
-    return this._env;
   }
 }

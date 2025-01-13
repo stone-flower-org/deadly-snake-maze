@@ -1,17 +1,17 @@
 import { type Class, compose, type ICommandManager } from '@stone-flower-org/js-utils';
 
-import { DSMSimulation } from '@/src/modules/snake-maze-client/utils/dsm-simulation';
+import { DSMApp } from '@/src/modules/snake-maze-client/utils/dsm-app';
 import { DSMValidation } from '@/src/modules/snake-maze-core/utils/validation';
 
 export interface ISubscriberOptions {
-  env: DSMSimulation;
+  app: DSMApp;
 }
 
 export abstract class AbstractExecutor {
-  _env: DSMSimulation;
+  _app: DSMApp;
 
-  constructor({ env }: ISubscriberOptions) {
-    this._env = env;
+  constructor({ app }: ISubscriberOptions) {
+    this._app = app;
   }
 
   protected _registerCommand<C>(store: ICommandManager, command: Class<C>, executor: (e: C) => unknown) {
