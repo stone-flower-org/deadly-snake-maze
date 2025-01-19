@@ -1,4 +1,4 @@
-import { type ITick } from '@stone-flower-org/js-utils';
+import { createContextSaver, type ITick } from '@stone-flower-org/js-utils';
 
 import { AbstractSimulation, IControllerCollection } from '@/src/modules/common/utils/threejs';
 import { DSMController } from '@/src/modules/snake-maze-client/utils/controllers';
@@ -19,6 +19,7 @@ export class DSMSimulation extends AbstractSimulation {
   protected _gameClient: IDSMGameClient;
   protected _store: DSMSimulationStore;
   protected _controller: IControllerCollection;
+  protected _binder = createContextSaver(this);
 
   constructor({ app, gameClient, store, controller }: DSMSimulationOptions) {
     super();
@@ -41,8 +42,12 @@ export class DSMSimulation extends AbstractSimulation {
   }
 
   async boot() {
-    await this._controller.init();
     await this._gameClient.boot();
+    this._app.on(DSMApp.EVENTS.boot, this._binder.useFunc(this.onAppBooted));
+  }
+
+  async onAppBooted() {
+    await this._controller.init();
   }
 
   onTick(tick: ITick): void {
@@ -52,6 +57,7 @@ export class DSMSimulation extends AbstractSimulation {
 
   delete(): void {
     super.delete();
+    this._app.off(DSMApp.EVENTS.boot, this._binder.useFunc(this.onAppBooted));
     this._controller.delete();
     this._gameClient.delete();
     this._store.delete();

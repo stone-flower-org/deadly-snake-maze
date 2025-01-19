@@ -3,15 +3,26 @@ import { ServiceProvider } from '@stone-flower-org/js-app';
 import { IThreejsApp, Renderer } from '@/src/modules/common/utils/threejs';
 import { DSMController } from '@/src/modules/snake-maze-client/utils/controllers';
 import { DSMGameClientFactory } from '@/src/modules/snake-maze-client/utils/dsm-game-client';
+import { DSMGameState } from '@/src/modules/snake-maze-core/utils/game';
 
 import { DSMApp } from './dsm-app';
 import { DSMSimulation } from './dsm-simulation';
-import { DSMSimulationStore } from './dsm-simulation-store';
+import { IDSMSimulationState, DSMSimulationStore, initialDSMSimulationState } from './dsm-simulation-store';
 
 export interface DSMAppOptions {
   canvas: HTMLElement;
   window: Window;
+  configs?: {
+    clientState?: IDSMSimulationState;
+    gameState?: DSMGameState;
+  };
 }
+
+export const defaultDSMAppOptions = {
+  configs: {
+    clientState: initialDSMSimulationState,
+  },
+};
 
 export class DSMAppFactory {
   protected _gameClientFactory: DSMGameClientFactory;
@@ -50,11 +61,15 @@ export class DSMAppFactory {
       app,
       controller: new DSMController({ app }),
       gameClient: this._gameClientFactory.createDSMGameClient(app, options),
-      store: new DSMSimulationStore({}),
+      store: new DSMSimulationStore(options.configs?.clientState ?? defaultDSMAppOptions.configs.clientState),
     });
   }
 
-  createThreejsRenderer(app: DSMApp, _: DSMAppOptions): Renderer {
-    return Renderer.create({ app: app as IThreejsApp });
+  createThreejsRenderer(app: DSMApp, { canvas }: DSMAppOptions): Renderer {
+    return Renderer.create({
+      antialias: true,
+      app: app as IThreejsApp,
+      canvas,
+    });
   }
 }

@@ -18,7 +18,7 @@ export interface DSMGameState {
   winners: IParticipant['id'][];
 }
 
-export const initialDSMState = {
+export const initialDSMState: DSMGameState = {
   participants: {},
   spaces: {},
   status: DSMGameStatus.pending,

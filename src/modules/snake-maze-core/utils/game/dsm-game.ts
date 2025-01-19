@@ -1,11 +1,5 @@
 import { ServiceProvider } from '@stone-flower-org/js-app';
-import {
-  type ICommandManager,
-  PriorityEventBus,
-  type IPriorityEventBus,
-  type ITick,
-  CommandManager,
-} from '@stone-flower-org/js-utils';
+import { type ICommandManager, type IPriorityEventBus, type ITick } from '@stone-flower-org/js-utils';
 
 import {
   DSMGameAfterUpdateEvent,
@@ -26,7 +20,10 @@ export type ICoreDSMGameServices = {
 
 export type IWithCoreDSMGameServices<S extends IValidGameServices = IValidGameServices> = ICoreDSMGameServices & S;
 
-export interface IDSMGameOptions extends IGameOptions<DSMGameStore> {}
+export interface IDSMGameOptions extends IGameOptions<DSMGameStore> {
+  priorityEventBus: IPriorityEventBus;
+  commandManager: ICommandManager;
+}
 
 export interface IDSMGame extends IGame<IWithCoreDSMGameServices<IDSMGameServices>, DSMGameStore> {
   getEventBus(): IPriorityEventBus;
@@ -39,7 +36,7 @@ export class DSMGame
 {
   constructor(options: IDSMGameOptions) {
     super(options);
-    this._initProviders();
+    this._initProviders(options);
   }
 
   async boot() {
@@ -72,17 +69,8 @@ export class DSMGame
     super.delete();
   }
 
-  protected _initProviders() {
-    const providers = this._createCoreProviders();
-    Object.entries(providers).forEach(([key, provider]) => {
-      this.registerProvider(key as keyof typeof providers, provider);
-    });
-  }
-
-  protected _createCoreProviders() {
-    return {
-      priorityEventBus: ServiceProvider.createFromFunc(PriorityEventBus.create),
-      commandManager: ServiceProvider.createFromFunc(CommandManager.create),
-    };
+  protected _initProviders(options: IDSMGameOptions) {
+    this.registerProvider('priorityEventBus', ServiceProvider.create(options.priorityEventBus));
+    this.registerProvider('commandManager', ServiceProvider.create(options.commandManager));
   }
 }

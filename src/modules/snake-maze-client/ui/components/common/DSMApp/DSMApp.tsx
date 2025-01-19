@@ -1,14 +1,17 @@
-import React, { memo, ReactNode, useEffect, useState } from 'react';
+import React, { forwardRef, memo, ReactNode, Ref, useEffect, useState } from 'react';
 
-import { Canvas, CanvasProps } from '@/src/modules/common/ui/components/Canvas';
+import { CanvasProps } from '@/src/modules/common/ui/components/Canvas';
 import { DSMAppProvider } from '@/src/modules/snake-maze-client/ui/context/DSMAppProvider';
 import { DSMApp as DSMAppCore, DSMAppFactory } from '@/src/modules/snake-maze-client/utils/dsm-app';
 
-export interface DSMAppProps extends CanvasProps {
+import { StyledCanvas, StyledContainer } from './styles';
+
+export interface DSMAppProps extends Omit<CanvasProps, 'ref'> {
+  ref?: Ref<HTMLDivElement>;
   children?: ReactNode;
 }
 
-const _DSMApp = ({ children, ...props }: DSMAppProps) => {
+const _DSMApp = forwardRef(({ className, children, ...props }: DSMAppProps, ref: DSMAppProps['ref']) => {
   const [dsmApp, setDsmApp] = useState<DSMAppCore | null>(null);
   const [canvasEl, setCanvasEl] = useState<HTMLElement | null>(null);
 
@@ -33,14 +36,19 @@ const _DSMApp = ({ children, ...props }: DSMAppProps) => {
   }, [canvasEl]);
 
   return (
-    <>
-      <Canvas
+    <StyledContainer
+      className="className"
+      ref={ref}
+    >
+      <StyledCanvas
         {...props}
         ref={setCanvasEl}
       />
       {dsmApp && <DSMAppProvider dsmApp={dsmApp}>{children}</DSMAppProvider>}
-    </>
+    </StyledContainer>
   );
-};
+});
+
+_DSMApp.displayName = '_DSMApp';
 
 export const DSMApp = memo(_DSMApp);

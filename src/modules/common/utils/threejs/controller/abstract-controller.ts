@@ -22,6 +22,7 @@ export abstract class AbstractController extends WithEventProducer(Function) imp
 
   delete() {
     this._eventBus.emit(AbstractController.EVENTS.delete, this);
+    this._eventBus.removeAllListeners();
   }
 
   protected _generateId(): string {

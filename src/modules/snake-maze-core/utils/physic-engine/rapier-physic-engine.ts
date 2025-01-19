@@ -1,26 +1,25 @@
-import RAPIER from '@dimforge/rapier3d';
 import { type ITick } from '@stone-flower-org/js-utils';
+
+import type RAPIER from '@dimforge/rapier3d';
 
 export const EARTH_GRAVITY = 9.81;
 
-export const DEFAULT_GRAVITY = new RAPIER.Vector3(0, EARTH_GRAVITY, 0);
-
 export interface RapierPhysicEngineOptions {
-  world: RAPIER.World;
+  RAPIER: typeof RAPIER;
 }
 
 export class RapierPhysicEngine {
   private _world: RAPIER.World;
-  private _eventBus: RAPIER.EventQueue;
+  private _eventQ: RAPIER.EventQueue;
 
   static async create() {
-    const world = new RAPIER.World(DEFAULT_GRAVITY);
-    return new this({ world });
+    const RAPIER = await import('@dimforge/rapier3d');
+    return new this({ RAPIER });
   }
 
-  constructor({ world }: RapierPhysicEngineOptions) {
-    this._world = world;
-    this._eventBus = new RAPIER.EventQueue(true);
+  constructor({ RAPIER }: RapierPhysicEngineOptions) {
+    this._world = new RAPIER.World(new RAPIER.Vector3(0, EARTH_GRAVITY, 0));
+    this._eventQ = new RAPIER.EventQueue(true);
   }
 
   getWorld() {
@@ -28,7 +27,7 @@ export class RapierPhysicEngine {
   }
 
   update(_: ITick) {
-    this._world.step(this._eventBus);
+    this._world.step(this._eventQ);
     // this._event; // TODO: add physic events conversion
   }
 

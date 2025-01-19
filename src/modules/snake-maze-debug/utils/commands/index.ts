@@ -1,7 +1,5 @@
-import { Class } from '@stone-flower-org/js-utils';
-
-import * as DSMCore from '@/src/modules/snake-maze-core/utils/commands';
 import * as DSMClient from '@/src/modules/snake-maze-client/utils/commands';
+import * as DSMCore from '@/src/modules/snake-maze-core/utils/commands';
 
 export type DSMCommandOption = {
   Class: typeof DSMCore.AbstractCommand | typeof DSMClient.AbstractCommand;
@@ -9,8 +7,8 @@ export type DSMCommandOption = {
   id: string;
 };
 
-const getCommandsFromModules = <M extends object>(modules: M, commandClass: DSMCommandOption['Class']) => {
-  return Object.entries(modules).reduce((options, [name, obj]) => {
+const getCommandsFromModules = <M extends object>(modules: M, commandClass: DSMCommandOption['Class']) =>
+  Object.entries(modules).reduce((options, [name, obj]) => {
     if (obj.prototype instanceof commandClass) {
       options.push({
         id: name,
@@ -20,7 +18,6 @@ const getCommandsFromModules = <M extends object>(modules: M, commandClass: DSMC
     }
     return options;
   }, [] as DSMCommandOption[]);
-};
 
 export const DSMCoreCommandOptions = (() => {
   const { AbstractCommand, ...rest } = DSMCore;
@@ -32,7 +29,6 @@ export const DSMClientCommandOptions = (() => {
   return getCommandsFromModules(rest, AbstractCommand);
 })();
 
-export const DSMCommandOptions = [
-  ...DSMClientCommandOptions,
-  ...DSMCoreCommandOptions,
-].sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+export const DSMCommandOptions = [...DSMClientCommandOptions, ...DSMCoreCommandOptions].sort((a, b) =>
+  a.label.toLowerCase().localeCompare(b.label.toLowerCase()),
+);

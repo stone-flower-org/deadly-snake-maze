@@ -6,7 +6,7 @@ import {
   type IServiceProvider,
   type IAppOptions,
 } from '@stone-flower-org/js-app';
-import { Clock, WithEventProducer, type IWithEventProducer } from '@stone-flower-org/js-utils';
+import { TickingClock, WithEventProducer, type IWithEventProducer } from '@stone-flower-org/js-utils';
 
 import { IRenderer, Renderer } from '@/src/modules/common/utils/threejs/renderer';
 import { ISimulation } from '@/src/modules/common/utils/threejs/simulation';
@@ -42,6 +42,7 @@ export class ThreejsApp<
 {
   static get EVENTS() {
     return {
+      boot: 'boot',
       delete: 'delete',
     };
   }
@@ -51,12 +52,17 @@ export class ThreejsApp<
       ...options,
       coreProviders: {
         ...options.coreProviders,
-        clock: ServiceProvider.create(Clock.create()),
+        clock: ServiceProvider.create(TickingClock.create()),
         store: options.coreProviders.store ?? ServiceProvider.create(ThreejsStore.create()),
       },
     } as IAppOptions<TS>);
 
     this._initCoreProviders(options);
+  }
+
+  async boot() {
+    await super.boot();
+    this._eventBus.emit(ThreejsApp.EVENTS.boot, this);
   }
 
   async start() {
@@ -94,7 +100,16 @@ export class ThreejsApp<
 
   protected _initCoreProviders(options: IThreejsAppOptions) {
     if (!options.coreProviders.renderer) {
-      this.registerProvider('renderer', ServiceProvider.create(Renderer.create({ app: this as ThreejsApp })));
+      this.registerProvider(
+        'renderer',
+        ServiceProvider.create(
+          Renderer.create({
+            antialias: true,
+            app: this as ThreejsApp,
+            canvas: options.coreProviders.canvas.get(),
+          }),
+        ),
+      );
     }
   }
 }

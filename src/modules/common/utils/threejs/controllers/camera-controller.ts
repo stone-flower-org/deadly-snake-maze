@@ -19,18 +19,24 @@ export class CameraController extends AbstractController {
 
   async init() {
     await super.init();
-    this._app.getService('store').on(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onResize));
-    this.onResize();
+    this._app.getService('store').on(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onScreenResize));
+    this._app.getService('store').on(ThreejsStore.EVENTS.scenechange, this._binder.useFunc(this.onSceneChange));
+    this.onScreenResize();
   }
 
-  onResize() {
+  onScreenResize() {
     const camera = this._app.getService('store').getScene()?.getCamera();
     if (!camera?.isPerspectiveCamera()) return;
     camera.setParams({ aspect: this._app.getService('store').getScreen().aspectRatio });
   }
 
+  onSceneChange() {
+    this.onScreenResize();
+  }
+
   delete() {
     super.delete();
-    this._app.getService('store').off(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onResize));
+    this._app.getService('store').off(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onScreenResize));
+    this._app.getService('store').off(ThreejsStore.EVENTS.screenresize, this._binder.useFunc(this.onSceneChange));
   }
 }

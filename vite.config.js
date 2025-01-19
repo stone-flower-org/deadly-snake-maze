@@ -8,6 +8,8 @@ const { createElement } = require('react');
 const { renderToString } = require('react-dom/server');
 const { defineConfig, splitVendorChunkPlugin } = require('vite');
 const svgr = require('vite-plugin-svgr').default;
+const topLevelAwait = require('vite-plugin-top-level-await');
+const wasm = require('vite-plugin-wasm');
 
 const { AppBootModal } = require('./src/modules/app/ui/components/AppBootModal/AppBootModal');
 
@@ -73,6 +75,8 @@ export default defineConfig(() => ({
       },
     }),
     splitVendorChunkPlugin(),
+    topLevelAwait(),
+    wasm(),
   ],
   publicDir: false,
   resolve: {
