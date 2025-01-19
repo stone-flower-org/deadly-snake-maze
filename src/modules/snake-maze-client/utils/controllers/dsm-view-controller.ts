@@ -1,18 +1,18 @@
 import { createContextSaver, type UnsubscribeFunc } from '@stone-flower-org/js-utils';
 
-import { AbstractController } from '@/src/modules/common/utils/threejs';
+import { AbstractControllerCollection } from '@/src/modules/common/utils/threejs';
 import { DSMApp } from '@/src/modules/snake-maze-client/utils/dsm-app';
 
 export interface DSMViewControllerParams {
   app: DSMApp;
 }
-export class DSMViewController extends AbstractController {
+export class DSMViewController extends AbstractControllerCollection {
   protected _app: DSMApp;
   protected _subscribers = new Set<UnsubscribeFunc>();
   protected _binder = createContextSaver(this);
 
   constructor({ app }: DSMViewControllerParams) {
-    super();
+    super({});
     this._app = app;
   }
 
@@ -22,5 +22,6 @@ export class DSMViewController extends AbstractController {
 
   delete() {
     this._subscribers.forEach((unsubscribe) => unsubscribe());
+    super.delete();
   }
 }

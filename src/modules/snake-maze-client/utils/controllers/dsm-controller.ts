@@ -43,7 +43,6 @@ export class DSMController extends AbstractControllerCollection {
   }
 
   onSimulationStoreChange(state: IDSMSimulationState) {
-    console.log('---- onSimulationStoreChange', state); // TODO: delete me
     this.onViewChange(state.view);
   }
 
