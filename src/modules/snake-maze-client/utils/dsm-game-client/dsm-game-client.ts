@@ -1,6 +1,7 @@
 import { type ICommandManager, type ITick, type IPriorityEventBus } from '@stone-flower-org/js-utils';
 
-import { DSMGameStore, IDSMGame } from '@/src/modules/snake-maze-core/utils/game';
+import { IDSMGame } from '@/src/modules/snake-maze-core/utils/game';
+import { DSMGameStore } from '@/src/modules/snake-maze-core/utils/store';
 
 export interface IDSMGameClient {
   boot(): Promise<void>;

@@ -11,7 +11,7 @@ export const useErrorHandler = () => {
   return useCallback(
     (e: Error) => {
       if (!shouldHandleError(e)) return;
-      app.getService('error-reporter').report(e);
+      app.getService('errorReporter').report(e);
       error({ title: DEFAULT_ALERT_ERROR_TITLE, message: e.message });
     },
     [error],

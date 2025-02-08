@@ -237,7 +237,7 @@ export class FlyingController extends AbstractController {
     const camera = this._app.getService('store').getScene()?.getCamera()?.getView();
     if (!camera) return;
 
-    const moveSpeed = this._getMovementSpeed() / tick.deltaTime;
+    const moveSpeed = tick.deltaTime ? this._getMovementSpeed() / tick.deltaTime : 0;
     const lookAt = new THREE.Vector3();
     camera.getWorldDirection(lookAt);
 
@@ -280,7 +280,7 @@ export class FlyingController extends AbstractController {
     const camera = this._app.getService('store').getScene()?.getCamera()?.getView();
     if (!camera) return;
 
-    const rotationSpeed = this._getRotationSpeed() / tick.deltaTime;
+    const rotationSpeed = tick.deltaTime ? this._getRotationSpeed() / tick.deltaTime : 0;
 
     const quantarionY = new THREE.Quaternion();
     quantarionY.setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotationSpeed * this._controlState.rotatex);

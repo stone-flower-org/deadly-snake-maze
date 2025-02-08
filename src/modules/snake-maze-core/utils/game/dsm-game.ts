@@ -8,9 +8,9 @@ import {
   DSMGameDeleteEvent,
   DSMGameUpdateEvent,
 } from '@/src/modules/snake-maze-core/utils/events';
+import { DSMGameStore } from '@/src/modules/snake-maze-core/utils/store';
 
 import { IDSMGameServices } from './dsm-game-services';
-import { DSMGameStore } from './dsm-game-store';
 import { AbstractGame, IGame, IGameOptions, IValidGameServices } from './game';
 
 export type ICoreDSMGameServices = {

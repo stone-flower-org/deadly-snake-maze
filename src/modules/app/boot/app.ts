@@ -8,15 +8,25 @@ import { AppServices } from '@/src/modules/app/utils/app';
 
 import { axiosProvider } from './axios';
 import { configsProvider } from './configs';
+import { errorReporterProvider } from './error-reporter';
+import { loggerProvider } from './logger';
 import { luxonProvider } from './luxon';
 import { routerProvider, routesStoreProvider } from './router';
 import { storeProvider } from './store';
 
-export const app = new AppContainer<AppServices>(() => {
-  const appEl = document.getElementById(APP_ELEMENT_ID);
-  if (!appEl) throw new Error(`Couldn't find #${APP_ELEMENT_ID} element`);
-  createRoot(appEl).render(createElement(AppComponent));
-});
+export const app = new AppContainer<AppServices>(
+  () => {
+    const appEl = document.getElementById(APP_ELEMENT_ID);
+    if (!appEl) throw new Error(`Couldn't find #${APP_ELEMENT_ID} element`);
+    createRoot(appEl).render(createElement(AppComponent));
+  },
+  {
+    coreProviders: {
+      errorReporter: errorReporterProvider,
+      logger: loggerProvider,
+    },
+  },
+);
 
 app.registerProvider('configs', configsProvider);
 app.registerProvider('date', luxonProvider);

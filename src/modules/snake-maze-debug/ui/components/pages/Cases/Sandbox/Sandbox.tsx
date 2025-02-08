@@ -9,7 +9,7 @@ const _Sandbox: FC = () => {
   const dsmApp = useDSMApp();
 
   useEffect(() => {
-    dsmApp.boot();
+    dsmApp.boot().then(() => dsmApp.start());
   }, [dsmApp]);
 
   return <SandboxTools />;

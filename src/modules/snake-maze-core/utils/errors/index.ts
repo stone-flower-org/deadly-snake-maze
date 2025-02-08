@@ -2,6 +2,8 @@ import { type Args } from '@stone-flower-org/js-utils';
 
 export class DSMError extends Error {}
 
+export class DSMStoreError extends DSMError {}
+
 export class DSMInvalidEventArgsError extends DSMError {
   protected _args: Args;
   protected _event: string;

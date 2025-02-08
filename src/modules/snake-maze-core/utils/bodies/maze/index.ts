@@ -1,4 +1,2 @@
-export * from './grass-wall';
-export * from './ground';
-export * from './maze';
-export * from './stone-wall';
+export * from './maze-body-manager';
+export * from './maze-body';

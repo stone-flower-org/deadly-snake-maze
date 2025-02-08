@@ -1,4 +1,5 @@
 import { Router } from '@remix-run/router';
+import { ConsoleLogger, LoggerErrorReporter } from '@stone-flower-org/js-app';
 import { Axios } from 'axios';
 
 import { configsProvider } from '@/src/modules/app/boot/configs';
@@ -15,6 +16,8 @@ export interface AppServices {
   store: RootStore;
   router: Router;
   routesStore: RoutesStore;
+  errorReporter: LoggerErrorReporter;
+  logger: ConsoleLogger;
 }
 
 export type AppServicesKey = keyof AppServices;

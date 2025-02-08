@@ -1,6 +1,7 @@
 import { ServiceProvider } from '@stone-flower-org/js-app';
 import { CommandManager, PriorityEventBus } from '@stone-flower-org/js-utils';
 
+import { MazeBodyManager, SnakeBodyManager } from '@/src/modules/snake-maze-core/utils/bodies';
 import { DSMGameExecutor } from '@/src/modules/snake-maze-core/utils/commands';
 import {
   ChickenBotSubscriber,
@@ -8,10 +9,12 @@ import {
   DSMGameSubscriber,
   PhysicSubscriber,
 } from '@/src/modules/snake-maze-core/utils/events';
-import { RapierPhysicEngine } from '@/src/modules/snake-maze-core/utils/physic-engine';
+import { PlayerManager } from '@/src/modules/snake-maze-core/utils/participants';
+import { RapierPhysicsEngine } from '@/src/modules/snake-maze-core/utils/physics-engine';
+import { MazeSpaceManager } from '@/src/modules/snake-maze-core/utils/spaces';
+import { DSMGameState, DSMGameStore, initialDSMState } from '@/src/modules/snake-maze-core/utils/store';
 
 import { DSMGame } from './dsm-game';
-import { DSMGameState, DSMGameStore, initialDSMState } from './dsm-game-store';
 
 export interface CreateGameOptions {
   configs?: {
@@ -48,8 +51,24 @@ export class DSMGameFactory {
 
   protected registerServiceProviders(game: DSMGame, _: CreateGameOptions) {
     game.registerProvider(
-      'physicEngine',
-      ServiceProvider.createFromFunc(async () => await RapierPhysicEngine.create()),
+      'physicsEngine',
+      ServiceProvider.createFromFunc(async () => await RapierPhysicsEngine.create()),
+    );
+    game.registerProvider(
+      'mazeBodyManager',
+      ServiceProvider.createFromFunc(() => new MazeBodyManager({ app: game })),
+    );
+    game.registerProvider(
+      'mazeSpaceManager',
+      ServiceProvider.createFromFunc(() => new MazeSpaceManager({ app: game })),
+    );
+    game.registerProvider(
+      'playerManager',
+      ServiceProvider.createFromFunc(() => new PlayerManager({ app: game })),
+    );
+    game.registerProvider(
+      'snakeBodyManager',
+      ServiceProvider.createFromFunc(() => new SnakeBodyManager({ app: game })),
     );
   }
 
@@ -66,7 +85,9 @@ export class DSMGameFactory {
   }
 
   protected createStore(options: CreateGameOptions) {
-    return DSMGameStore.create(options.configs?.gameState ?? defaultCreateGameOptions.configs?.gameState);
+    return DSMGameStore.create(
+      options.configs?.gameState ?? defaultCreateGameOptions.configs?.gameState,
+    ) as DSMGameStore;
   }
 
   protected createSubscribers(game: DSMGame, _: CreateGameOptions) {

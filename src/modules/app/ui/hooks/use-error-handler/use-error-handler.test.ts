@@ -25,7 +25,7 @@ const renderUseErrorHandler = (renderProps: RenderHookOptions = {}) =>
 
 beforeAll(async () => {
   await setupAndBootApp();
-  const errorReporter = app.getService('error-reporter');
+  const errorReporter = app.getService('errorReporter');
   reportSpy = vi.spyOn(errorReporter, 'report').mockImplementation(async () => undefined);
 });
 

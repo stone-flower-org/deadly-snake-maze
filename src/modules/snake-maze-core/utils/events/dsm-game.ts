@@ -1,7 +1,6 @@
-import { compose, type IPriorityEventBus, type ITick } from '@stone-flower-org/js-utils';
+import { type IPriorityEventBus, type ITick } from '@stone-flower-org/js-utils';
 
 import { IGame } from '@/src/modules/snake-maze-core/utils/game';
-import { DSMValidation } from '@/src/modules/snake-maze-core/utils/validation';
 
 import { AbstractEvent } from './abstract-event';
 import { AbstractDSMSGameubscriber } from './abstract-subscriber';
@@ -28,7 +27,13 @@ export class DSMGameDeleteEvent extends AbstractEvent<IDSMGameEventPayload> {}
 
 export class DSMGameSubscriber extends AbstractDSMSGameubscriber {
   listenDSMGameUpdateEvent(e: DSMGameUpdateEvent) {
-    this._game.getService('physicEngine').update(e.payload.tick);
+    const engine = this._game.getService('physicsEngine');
+    this._game
+      .getStore()
+      .getAllSpaces()
+      .forEach((space) => {
+        engine.updateWorlds([space.getWorld()], e.payload.tick);
+      });
   }
 
   listenDSMGameAfterUpdateEvent(_: DSMGameAfterUpdateEvent) {

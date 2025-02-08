@@ -34,7 +34,7 @@ export const AppErrorBoundary = ({ children, fallback }: AppErrorBoundaryProps) 
   useEffect(() => {
     if (!error) return;
     setError(error);
-    app.getService('error-reporter').report(error);
+    app.getService('errorReporter').report(error);
   }, [error]);
 
   return <AppErrorBoundaryCatcher onError={setError}>{rendered}</AppErrorBoundaryCatcher>;

@@ -1,20 +1,23 @@
 import { ServiceProvider } from '@stone-flower-org/js-app';
 
 import { IThreejsApp, Renderer } from '@/src/modules/common/utils/threejs';
-import { DSMController } from '@/src/modules/snake-maze-client/utils/controllers';
+import { DSMMainController } from '@/src/modules/snake-maze-client/utils/controllers';
 import { DSMGameClientFactory } from '@/src/modules/snake-maze-client/utils/dsm-game-client';
-import { DSMGameState } from '@/src/modules/snake-maze-core/utils/game';
+import { SceneRenderer } from '@/src/modules/snake-maze-client/utils/scene-renderer';
+import {
+  IDSMSimulationState,
+  DSMSimulationStore,
+  initialDSMSimulationState,
+} from '@/src/modules/snake-maze-client/utils/store';
 
 import { DSMApp } from './dsm-app';
 import { DSMSimulation } from './dsm-simulation';
-import { IDSMSimulationState, DSMSimulationStore, initialDSMSimulationState } from './dsm-simulation-store';
 
 export interface DSMAppOptions {
   canvas: HTMLElement;
   window: Window;
   configs?: {
     clientState?: IDSMSimulationState;
-    gameState?: DSMGameState;
   };
 }
 
@@ -53,15 +56,21 @@ export class DSMAppFactory {
       },
     });
 
+    this.registerServiceProviders(app, options);
+
     return app;
   }
 
   createDSMSimulation(app: DSMApp, options: DSMAppOptions) {
+    const gameClient = this._gameClientFactory.createDSMGameClient(app, options);
     return new DSMSimulation({
       app,
-      controller: new DSMController({ app }),
-      gameClient: this._gameClientFactory.createDSMGameClient(app, options),
-      store: new DSMSimulationStore(options.configs?.clientState ?? defaultDSMAppOptions.configs.clientState),
+      controller: new DSMMainController({ app }),
+      gameClient,
+      store: new DSMSimulationStore(
+        options.configs?.clientState ?? defaultDSMAppOptions.configs.clientState,
+        gameClient.getStore(),
+      ),
     });
   }
 
@@ -71,5 +80,12 @@ export class DSMAppFactory {
       app: app as IThreejsApp,
       canvas,
     });
+  }
+
+  registerServiceProviders(app: DSMApp, _: DSMAppOptions) {
+    app.registerProvider(
+      'sceneRenderer',
+      ServiceProvider.createFromFunc(() => new SceneRenderer({ app })),
+    );
   }
 }

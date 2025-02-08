@@ -7,45 +7,57 @@ export type DSMCommandNonPayload = undefined;
 
 export type DSMMoveCommandPayload = object; // TODO: write me
 
-// DSMMoveCommand
-export class DSMMoveCommand extends AbstractCommand<DSMMoveCommandPayload> {}
+/* DSMInitGameCommand start */
+export interface DSMInitGameCommandPayload {
+  mazeCells?: number;
+}
 
-// DSMInitGameCommand
-export class DSMInitGameCommand extends AbstractCommand<DSMCommandNonPayload> {}
+export class DSMInitGameCommand extends AbstractCommand<DSMInitGameCommandPayload> {}
+/* DSMInitGameCommand end */
 
-// DSMInitGameCommand
-export class DSMStartGameCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMReadyCommand
-export class DSMReadyCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMAddChickenBotCommand
-export class DSMAddChickenBotCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMRemoveChickenBotCommand
-export class DSMRemoveChickenBotCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMAddPlayerCommand
-export class DSMAddPlayerCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMRemovePlayerCommand
-export class DSMRemovePlayerCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMCreateMazeSpaceCommand
-export class DSMCreateMazeSpaceCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMCreateRaceSpaceCommand
-export class DSMCreateRaceSpaceCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMTransitCommand
-export class DSMTransitCommand extends AbstractCommand<DSMCommandNonPayload> {}
-
-// DSMJoinCommand
+/* DSMJoinCommand start */
 export type DSMJoinCommandResult = {
   id: number;
 };
 
 export class DSMJoinCommand extends AbstractCommand<DSMCommandNonPayload> {}
+/* DSMJoinCommand end */
+
+/* DSMStartCommand Start */
+export interface DSMStartCommandPayload {
+  playerId: number;
+}
+
+export class DSMStartCommand extends AbstractCommand<DSMStartCommandPayload> {}
+/* DSMStartCommand End */
+
+/* DSMReadyCommand Start */
+export interface DSMReadyCommandPayload {
+  playerId: number;
+}
+
+export class DSMReadyCommand extends AbstractCommand<DSMReadyCommandPayload> {}
+/* DSMReadyCommand End */
+
+/* DSMMoveCommand start */
+export class DSMMoveCommand extends AbstractCommand<DSMMoveCommandPayload> {}
+/* DSMMoveCommand end */
+
+/* DSMStopCommand start */
+export interface DSMStopCommandPayload {
+  playerId: number;
+}
+
+export class DSMStopCommand extends AbstractCommand<DSMStopCommandPayload> {}
+/* DSMStopCommand end */
+
+/* DSMContinueCommand Start */
+export interface DSMContinueCommandPayload {
+  playerId: number;
+}
+
+export class DSMContinueCommand extends AbstractCommand<DSMContinueCommandPayload> {}
+/* DSMContinueCommand End */
 
 export class DSMGameExecutor extends AbstractExecutor {
   execDSMInitGameCommand(c: DSMInitGameCommand) {
@@ -55,6 +67,9 @@ export class DSMGameExecutor extends AbstractExecutor {
     create race
     add bots
     */
+    const { mazeCells } = c.payload;
+
+    this._game.getService('mazeSpaceManager').create({ cells: mazeCells });
   }
 
   execDSMReadyCommand(c: DSMReadyCommand) {
@@ -65,30 +80,24 @@ export class DSMGameExecutor extends AbstractExecutor {
     */
   }
 
-  execDSMStartCommand(c: DSMStartGameCommand) {
-    // TODO: write me
-    /*
-    update status of the game
-    */
-  }
-
   execDSMMoveCommand(c: DSMMoveCommand) {
     // TODO: write me
   }
 
-  execDSMJoinCommand(c: DSMJoinCommand) {
-    // TODO: write me
-    /*
-    add player
-    return players id
-    */
+  execDSMJoinCommand(_: DSMJoinCommand): DSMJoinCommandResult {
+    const mazeSpace = this._game.getService('mazeSpaceManager').findMazeSpace();
+
+    const player = this._game.getService('playerManager').create({
+      space: mazeSpace,
+    });
+
+    return { id: player.getId() };
   }
 
-  register(store: ICommandManager) {
-    this._registerCommand(store, DSMInitGameCommand, this.execDSMInitGameCommand.bind(this));
-    this._registerCommand(store, DSMReadyCommand, this.execDSMReadyCommand.bind(this));
-    this._registerCommand(store, DSMStartGameCommand, this.execDSMStartCommand.bind(this));
-    this._registerCommand(store, DSMMoveCommand, this.execDSMMoveCommand.bind(this));
-    this._registerCommand(store, DSMJoinCommand, this.execDSMJoinCommand.bind(this));
+  register(cmd: ICommandManager) {
+    this._registerCommand(cmd, DSMInitGameCommand, this.execDSMInitGameCommand.bind(this));
+    this._registerCommand(cmd, DSMReadyCommand, this.execDSMReadyCommand.bind(this));
+    this._registerCommand(cmd, DSMMoveCommand, this.execDSMMoveCommand.bind(this));
+    this._registerCommand(cmd, DSMJoinCommand, this.execDSMJoinCommand.bind(this));
   }
 }

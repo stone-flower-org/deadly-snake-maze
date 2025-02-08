@@ -1,1 +1,2 @@
-export * from './chicken';
+export * from './chicken-body-manager';
+export * from './chicken-body';

@@ -1,23 +1,22 @@
-import { createAutoincrementIdGenerator, type ITick } from '@stone-flower-org/js-utils';
+import { createAutoincrementIdGenerator } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
 import { ICamera } from '@/src/modules/common/utils/threejs/camera';
-import { SceneEntityCollection } from '@/src/modules/common/utils/threejs/entity';
-import { Object3DUtils } from '@/src/modules/common/utils/threejs/utils';
+import { EntityGroup, EntityGroupCollection } from '@/src/modules/common/utils/threejs/entity';
 
-import { IScene, ISceneOptions, ISceneView } from './scene';
+import { IScene, ISceneOptions } from './scene';
 
-export abstract class AbstractScene<C extends ICamera = ICamera> implements IScene<C> {
+export abstract class AbstractScene<C extends ICamera = ICamera> extends EntityGroup implements IScene<C> {
   public readonly id: number;
-  protected _entities: SceneEntityCollection;
-  protected _scene: ISceneView;
+  protected _entities: EntityGroupCollection;
 
   protected static _generateId = createAutoincrementIdGenerator();
 
   constructor({ entities, scene }: Partial<ISceneOptions> = {}) {
+    super();
     this.id = this._generateId();
-    this._scene = scene ?? new THREE.Scene();
-    this._entities = SceneEntityCollection.create({ entities, scene: this });
+    this._view = scene ?? new THREE.Scene();
+    this._entities = EntityGroupCollection.create({ entities, view: this.getView() });
   }
 
   async init() {
@@ -25,24 +24,7 @@ export abstract class AbstractScene<C extends ICamera = ICamera> implements ISce
   }
 
   getView() {
-    return this._scene;
-  }
-
-  getEntitiesCollection() {
-    return this._entities;
-  }
-
-  update(tick: ITick) {
-    this._entities.update(tick);
-  }
-
-  clear() {
-    this._entities.delete();
-  }
-
-  delete() {
-    this.clear();
-    Object3DUtils.instance().deleteObject(this._scene);
+    return this._view;
   }
 
   abstract getCamera(): C | undefined;

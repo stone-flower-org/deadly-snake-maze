@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 import { IAnimated } from '@/src/modules/common/utils/threejs/animated';
 import { ICamera } from '@/src/modules/common/utils/threejs/camera';
-import { IEntity, IEntityCollection } from '@/src/modules/common/utils/threejs/entity';
+import { IEntity, IEntityCollection, IView } from '@/src/modules/common/utils/threejs/entity';
 
-export type ISceneView = THREE.Scene;
+export type ISceneView = IView;
 
 export interface IScene<C extends ICamera = ICamera> extends IAnimated {
   readonly id: number;

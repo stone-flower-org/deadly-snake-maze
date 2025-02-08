@@ -1,2 +1,2 @@
-export * from './dsm-maze-scene';
-export * from './dsm-race-scene';
+export * from './abstract-dsm-scene';
+export * from './dsm-main-scene';

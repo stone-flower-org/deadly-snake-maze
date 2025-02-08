@@ -1,17 +1,18 @@
 import { createContextSaver, type ITick } from '@stone-flower-org/js-utils';
 
 import { AbstractSimulation, IControllerCollection } from '@/src/modules/common/utils/threejs';
-import { DSMController } from '@/src/modules/snake-maze-client/utils/controllers';
+import { DSMMainController } from '@/src/modules/snake-maze-client/utils/controllers';
 import { IDSMGameClient } from '@/src/modules/snake-maze-client/utils/dsm-game-client';
+import { DSMMainScene } from '@/src/modules/snake-maze-client/utils/scenes';
+import { DSMSimulationStore } from '@/src/modules/snake-maze-client/utils/store';
 
 import { DSMApp } from './dsm-app';
-import { DSMSimulationStore } from './dsm-simulation-store';
 
 export interface DSMSimulationOptions {
   app: DSMApp;
   gameClient: IDSMGameClient;
   store: DSMSimulationStore;
-  controller: DSMController;
+  controller: DSMMainController;
 }
 
 export class DSMSimulation extends AbstractSimulation {
@@ -27,6 +28,7 @@ export class DSMSimulation extends AbstractSimulation {
     this._gameClient = gameClient;
     this._store = store;
     this._controller = controller;
+    this._app.getService('store').setScene(DSMMainScene.create({ app }));
   }
 
   getGameClient() {
@@ -52,7 +54,7 @@ export class DSMSimulation extends AbstractSimulation {
 
   onTick(tick: ITick): void {
     this._gameClient.update(tick);
-    this._app.getService('store').getScene()?.update(tick);
+    this._app.getService('sceneRenderer').render(tick);
   }
 
   delete(): void {
