@@ -1,4 +1,7 @@
+import { IBodyUserData } from '@/src/modules/snake-maze-core/utils/bodies/body';
 import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
+
+export type IMazeBodyUserData = IBodyUserData;
 
 export class MazeBody extends BodyModel {
   static get CELL() {
