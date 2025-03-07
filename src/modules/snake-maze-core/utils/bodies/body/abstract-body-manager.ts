@@ -6,7 +6,7 @@ export interface IAbstractBodyManagerParams {
 }
 
 export type IBodyUserData<T extends object = object> = T & {
-  map: string[];
+  bodyParts: string[];
 };
 
 export abstract class AbstractBodyManager<E extends BodyModel> {

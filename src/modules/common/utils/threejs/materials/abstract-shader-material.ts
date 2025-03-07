@@ -2,11 +2,11 @@ import * as THREE from 'three';
 
 import { WithUniformsMixin } from './uniforms-mixin';
 
-export interface AbstractShaderMaterialOptions
+export interface IAbstractShaderMaterialOptions
   extends Omit<THREE.ShaderMaterialParameters, 'fragmentShader' | 'vertexShader'> {}
 
 export abstract class AbstractShaderMaterial extends WithUniformsMixin(THREE.ShaderMaterial) {
-  constructor(params: AbstractShaderMaterialOptions = {}) {
+  constructor(params: IAbstractShaderMaterialOptions = {}) {
     super(params);
 
     const { fragmentShader, vertexShader } = this.getShaders();

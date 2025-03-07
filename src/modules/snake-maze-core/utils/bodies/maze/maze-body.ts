@@ -6,7 +6,7 @@ export type IMazeBodyUserData = IBodyUserData;
 export class MazeBody extends BodyModel {
   static get CELL() {
     return {
-      w: 3,
+      w: 5,
     };
   }
 
@@ -23,7 +23,7 @@ export class MazeBody extends BodyModel {
     };
   }
 
-  static get BODIES() {
+  static get BODY_PARTS() {
     return {
       floor: 'floor',
       wall: 'wall',

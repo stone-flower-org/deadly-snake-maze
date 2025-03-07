@@ -1,5 +1,6 @@
 import { createAutoincrementIdGenerator } from '@stone-flower-org/js-utils';
 
+import { IBodyUserData } from '@/src/modules/snake-maze-core/utils/bodies/body';
 import { PhysicsEngine } from '@/src/modules/snake-maze-core/utils/physics-engine';
 
 import { AbstractModel, IModelParams } from './abstract-model';
@@ -32,6 +33,7 @@ export class BodyModel extends AbstractModel<IBodyState> {
   constructor(params: IBodyModelParams) {
     super(params);
     this._rigidBody = params.rigidBody;
+    this._rigidBody.userData = params.rigidBody.userData ?? this._createUserData();
   }
 
   getBody() {
@@ -44,5 +46,19 @@ export class BodyModel extends AbstractModel<IBodyState> {
 
   getRotation() {
     return this._rigidBody.rotation();
+  }
+
+  getUserData() {
+    return this.getBody().userData as ReturnType<typeof this._createUserData>;
+  }
+
+  registerBodyPart(bodyPart: string, _: PhysicsEngine.Collider) {
+    this.getUserData().bodyParts.push(bodyPart);
+  }
+
+  protected _createUserData() {
+    return {
+      bodyParts: [],
+    } as IBodyUserData;
   }
 }

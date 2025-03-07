@@ -1,15 +1,16 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const copyStatic = require('@stone-flower-org/vite-plugin-copy-static').default;
-const htmlTemplatePlugin = require('@stone-flower-org/vite-plugin-html-template').default;
-const react = require('@vitejs/plugin-react');
-const { createElement } = require('react');
-const { renderToString } = require('react-dom/server');
-const { defineConfig, splitVendorChunkPlugin } = require('vite');
-const svgr = require('vite-plugin-svgr').default;
-const topLevelAwait = require('vite-plugin-top-level-await');
-const wasm = require('vite-plugin-wasm');
+import copyStatic from '@stone-flower-org/vite-plugin-copy-static';
+import htmlTemplatePlugin from '@stone-flower-org/vite-plugin-html-template';
+import react from '@vitejs/plugin-react';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import glsl from 'vite-plugin-glsl';
+import svgr from 'vite-plugin-svgr';
+import topLevelAwait from 'vite-plugin-top-level-await';
+import wasm from 'vite-plugin-wasm';
 
 const { AppBootModal } = require('./src/modules/app/ui/components/AppBootModal/AppBootModal');
 
@@ -77,6 +78,9 @@ export default defineConfig(() => ({
     splitVendorChunkPlugin(),
     topLevelAwait(),
     wasm(),
+    glsl({
+      watch: true,
+    }),
   ],
   publicDir: false,
   resolve: {

@@ -3,3 +3,4 @@
 export * from './rigid-body';
 export * from './shape';
 export * from './types';
+export * from './utils';

@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 import { Rapier3D } from '@/src/modules/common/utils/rapier';
 import { AbstractBodyEntity } from '@/src/modules/snake-maze-client/utils/entiteis/abstract-body-entity';
-import { UnknownEntity } from '@/src/modules/snake-maze-client/utils/entiteis/unknown-entity';
-import { grassMaterial } from '@/src/modules/snake-maze-client/utils/materials';
-import { IBodyUserData, MazeBody } from '@/src/modules/snake-maze-core/utils/bodies';
+import { UnknownBodyEntity } from '@/src/modules/snake-maze-client/utils/entiteis/unknown-body-entity';
+import { grassMaterial, unknownMaterial } from '@/src/modules/snake-maze-client/utils/materials';
+import { MazeBody } from '@/src/modules/snake-maze-core/utils/bodies';
 import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
 
 export class MazeEntity extends AbstractBodyEntity {
@@ -15,20 +15,20 @@ export class MazeEntity extends AbstractBodyEntity {
   }
 
   static createFromBodyModel(model: BodyModel) {
-    const userData = model.getBody().userData as IBodyUserData;
-
     const view = new THREE.Group();
 
-    userData.map.forEach((type, i) => {
-      if (type === MazeBody.BODIES.floor) {
+    AbstractBodyEntity.setViewPlacementFromRigidBody(view, model.getBody());
+
+    model.getUserData().bodyParts.forEach((type, i) => {
+      if (type === MazeBody.BODY_PARTS.floor) {
         view.add(MazeEntity.createFloor(model.getBody().collider(i)));
         return;
       }
-      // if (type === MazeBody.BODIES.wall) {
+      // if (type === MazeBody.BODY_PARTS.wall) {
       //   view.add(MazeEntity.createWall(model.getBody().collider(i)));
       //   return;
       // }
-      view.add(UnknownEntity.createFromCollider(model.getBody().collider(i)));
+      view.add(UnknownBodyEntity.createFromCollider(model.getBody().collider(i)));
     });
 
     return new this({ view });
@@ -38,16 +38,19 @@ export class MazeEntity extends AbstractBodyEntity {
     const buboid = collider.shape as Rapier3D.Cuboid;
 
     const w = buboid.halfExtents.x * 2;
-    const h = buboid.halfExtents.z * 2;
+    const d = buboid.halfExtents.z * 2;
 
     const floorGeometry = new THREE.PlaneGeometry(
       w,
-      h,
+      d,
       w * MazeEntity.FLOOR.polDensity,
-      h * MazeEntity.FLOOR.polDensity,
+      d * MazeEntity.FLOOR.polDensity,
     );
 
-    const floor = new THREE.Mesh(floorGeometry, grassMaterial);
+    // const floor = new THREE.Mesh(floorGeometry, grassMaterial); // TODO: uncomment me
+    const floor = new THREE.Mesh(floorGeometry, unknownMaterial); // TODO: delete me
+
+    AbstractBodyEntity.setViewPlacementFromCollider(floor, collider);
     floor.position.y += buboid.halfExtents.y;
 
     return floor;

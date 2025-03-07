@@ -32,7 +32,7 @@ configs/config.local.json
 !README.md
 !tsconfig.json
 !tsconfig.production.json
-!vite.config.js
+!vite.config.mjs
 !vitest-setup.js
 !vitest.config.js
 !yarn.lock

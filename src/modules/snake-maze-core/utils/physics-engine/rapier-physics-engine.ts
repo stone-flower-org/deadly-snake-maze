@@ -1,5 +1,7 @@
 import { type ITick } from '@stone-flower-org/js-utils';
 
+import { eulerToQuaternion } from '@/src/modules/common/utils/rapier';
+
 import type RAPIER from '@dimforge/rapier3d';
 
 export { type Rapier3D as PhysicsEngine } from '@/src/modules/common/utils/rapier';
@@ -23,10 +25,12 @@ export class RapierPhysicsEngine {
   }
 
   constructor({ RAPIER }: RapierPhysicsEngineOptions) {
+    const originVec3 = new RAPIER.Vector3(0, 0, 0);
+    const originRotation = eulerToQuaternion(originVec3);
     this._rapier = RAPIER;
     this._eventQ = new RAPIER.EventQueue(true);
-    this.originPosition = new RAPIER.Vector3(0, 0, 0);
-    this.originRotation = new RAPIER.Quaternion(0, 0, 0, 1);
+    this.originPosition = originVec3;
+    this.originRotation = new RAPIER.Quaternion(originRotation.x, originRotation.y, originRotation.z, originRotation.w);
   }
 
   createWorld() {

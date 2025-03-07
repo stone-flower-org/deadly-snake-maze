@@ -8,11 +8,11 @@ import { unknownMaterial } from '@/src/modules/snake-maze-client/utils/materials
 import { PhysicsEngine } from '@/src/modules/snake-maze-core/utils/physics-engine';
 import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
 
-export interface IUnknownEntityParams {
+export interface IUnknownBodyEntityParams {
   view: IView;
 }
 
-export class UnknownEntity extends AbstractBodyEntity {
+export class UnknownBodyEntity extends AbstractBodyEntity {
   static createFromBodyModel(body: BodyModel) {
     return this.createFromRigidBody(body.getBody());
   }
@@ -24,11 +24,7 @@ export class UnknownEntity extends AbstractBodyEntity {
       view.add(this.createFromCollider(collider));
     });
 
-    const rotation = body.rotation();
-    view.rotation.set(rotation.x, rotation.y, rotation.z);
-
-    const positions = body.translation();
-    view.position.set(positions.x, positions.y, positions.z);
+    AbstractBodyEntity.setViewPlacementFromRigidBody(view, body);
 
     return new this({ view });
   }
@@ -36,11 +32,7 @@ export class UnknownEntity extends AbstractBodyEntity {
   static createFromCollider(collider: PhysicsEngine.Collider) {
     const view = new THREE.Mesh(unknownGeometry, unknownMaterial);
 
-    const rotation = collider.rotation();
-    view.rotation.set(rotation.x, rotation.y, rotation.z);
-
-    const positions = collider.translation();
-    view.position.set(positions.x, positions.y, positions.z);
+    AbstractBodyEntity.setViewPlacementFromCollider(view, collider);
 
     const size = getCubeFromShapeSafe(collider.shape, [1, 1, 1]);
     view.scale.set(size[0], size[1], size[2]);

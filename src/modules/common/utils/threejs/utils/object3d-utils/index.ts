@@ -1,4 +1,4 @@
-import { Box3, BufferGeometry, Material, Mesh, Object3D, Quaternion, Vector3 } from 'three';
+import { Box3, BufferGeometry, Material, Mesh, Object3D, Quaternion, Vector3, Vector4 } from 'three';
 
 export type ObjectWithMaterial<O extends Object3D = Object3D, M extends Material = Material> = O & {
   material: M | M[];
@@ -90,5 +90,11 @@ export class Object3DUtils {
     const quaternion = new Quaternion();
     object.getWorldQuaternion(quaternion);
     object.setRotationFromQuaternion(quaternion.invert());
+  }
+
+  setRotationFromQuanternionVec(object: Object3D, { x, y, z, w }: Vector4) {
+    const q = new Quaternion();
+    q.set(x, y, z, w);
+    object.rotation.setFromQuaternion(q);
   }
 }
