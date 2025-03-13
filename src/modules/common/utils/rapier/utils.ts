@@ -16,9 +16,9 @@ export const eulerToQuaternion = ({ x, y, z }: { x: number; y: number; z: number
 
 export const quaternionToEuler = ({ x, y, z, w }: { x: number; y: number; z: number; w: number }) => {
   // Roll (X-axis rotation)
-  const sinr_cosp = 2 * (w * x + y * z);
-  const cosr_cosp = 1 - 2 * (x * x + y * y);
-  const roll = Math.atan2(sinr_cosp, cosr_cosp);
+  const sinrCosp = 2 * (w * x + y * z);
+  const cosrCosp = 1 - 2 * (x * x + y * y);
+  const roll = Math.atan2(sinrCosp, cosrCosp);
 
   // Pitch (Y-axis rotation)
   const sinp = 2 * (w * y - z * x);
@@ -30,9 +30,9 @@ export const quaternionToEuler = ({ x, y, z, w }: { x: number; y: number; z: num
   }
 
   // Yaw (Z-axis rotation)
-  const siny_cosp = 2 * (w * z + x * y);
-  const cosy_cosp = 1 - 2 * (y * y + z * z);
-  const yaw = Math.atan2(siny_cosp, cosy_cosp);
+  const sinyCosp = 2 * (w * z + x * y);
+  const cosyCosp = 1 - 2 * (y * y + z * z);
+  const yaw = Math.atan2(sinyCosp, cosyCosp);
 
   return { x: roll, y: pitch, z: yaw };
 };

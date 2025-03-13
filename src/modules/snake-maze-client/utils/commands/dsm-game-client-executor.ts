@@ -22,7 +22,7 @@ export class DSMGameClientExecutor extends AbstractExecutor {
     const simulation = this._app.getService('simulation');
     const cmd = simulation.getGameClient().getCommandManager();
 
-    await cmd.exec(DSMInitGameCommand.name, DSMInitGameCommand.create({ mazeCells: 10 }));
+    await cmd.exec(DSMInitGameCommand.name, DSMInitGameCommand.create({ mazeCells: 9 }));
 
     const { id } = await cmd.exec<DSMJoinCommandResult>(DSMJoinCommand.name, DSMJoinCommand.create(undefined));
 

@@ -1,10 +1,14 @@
-import { BidirectionalGraph, randomBetween, type GraphEdge } from '@stone-flower-org/js-utils';
+import { BidirectionalGraph, loop, randomBetween, type GraphEdge } from '@stone-flower-org/js-utils';
 
 import { DSMError } from '@/src/modules/snake-maze-core/utils/errors';
 
 export type MazeGraphEdgeData = { wall: boolean };
 
-export type MazeGraphNodeData = void;
+export type MazeGraphNodeData = {
+  hunterSpawn?: boolean;
+  preySpawn?: boolean;
+  exit?: boolean;
+};
 
 export type MazeGraphEdge = GraphEdge<MazeGraphEdgeData>;
 
@@ -25,7 +29,9 @@ export class MazeGraphGenerator {
 
     const mazeGraph = this._makeMazeGraph(params);
 
-    this._randomizeWalls(params, mazeGraph);
+    // this._randomizeWalls(params, mazeGraph); // TODO: uncomment me
+
+    this._randomizeSpawnNExit(params, mazeGraph);
 
     return mazeGraph;
   }
@@ -38,6 +44,8 @@ export class MazeGraphGenerator {
         const c = [x, y];
         const r = [x + 1, y];
         const b = [x, y + 1];
+
+        graph.addNode([c.join(), {}]);
 
         if (r[0] < xCells) graph.addEdge([c.join(), r.join(), { wall: true }]);
 
@@ -77,6 +85,29 @@ export class MazeGraphGenerator {
         transitions.push([cell, nCell]);
       });
     }
+  }
+
+  _randomizeSpawnNExit({ xCells, yCells }: ICreateMazeGeneratorParams, graph: MazeGraph) {
+    const mazeCorners = [
+      [0, 0],
+      [xCells - 1, 0],
+      [xCells - 1, yCells - 1],
+      [0, yCells - 1],
+    ];
+
+    const exitI = randomBetween(0, mazeCorners.length - 1);
+    const exit = mazeCorners[exitI];
+    const eixtNodeData = graph.getNode(exit.join())[1];
+    eixtNodeData && (eixtNodeData.exit = true);
+
+    const hunterSpawnI = loop(exitI + (Math.random() > 0.5 ? 1 : -1), 0, mazeCorners.length - 1)
+    const hunterSpawn = mazeCorners[hunterSpawnI];
+    const hunterSpawnNodeData = graph.getNode(hunterSpawn.join())[1];
+    hunterSpawnNodeData && (hunterSpawnNodeData.hunterSpawn = true);
+    
+    const preySpawn = [Math.ceil(xCells / 2) - 1, Math.ceil(yCells / 2) - 1];
+    const preySpawnNodeData = graph.getNode(preySpawn.join())[1];
+    preySpawnNodeData && (preySpawnNodeData.preySpawn = true);
   }
 
   _getCellNeighbours({ xCells, yCells }: ICreateMazeGeneratorParams, [x, y]: [number, number]): [number, number][] {

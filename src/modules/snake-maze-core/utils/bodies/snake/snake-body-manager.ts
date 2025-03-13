@@ -16,7 +16,7 @@ export class SnakeBodyManager extends AbstractBodyManager<SnakeBody> {
       ..._params,
       rotation: _params.rotation ?? this._app.getService('physicsEngine').originRotation,
       position: _params.position ?? this._app.getService('physicsEngine').originPosition,
-      cells: 10,
+      cells: 9,
     };
 
     const rigidBody = this._createRigidBody(params);

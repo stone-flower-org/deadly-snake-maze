@@ -52,6 +52,18 @@ export class BodyModel extends AbstractModel<IBodyState> {
     return this.getBody().userData as ReturnType<typeof this._createUserData>;
   }
 
+  findColliderByBodyPart(bodyPart: string) {
+    const i = this.getUserData().bodyParts.findIndex((type) => type === bodyPart);
+    return i < 0 ? undefined : this.getBody().collider(i);
+  }
+
+  getCollidersByBodyPart(bodyPart: string) {
+    return this.getUserData().bodyParts.reduce((colliders, type, i) => {
+      if (type === bodyPart) colliders.push(this.getBody().collider(i));
+      return colliders;
+    }, [] as PhysicsEngine.Collider[])
+  }
+
   registerBodyPart(bodyPart: string, _: PhysicsEngine.Collider) {
     this.getUserData().bodyParts.push(bodyPart);
   }

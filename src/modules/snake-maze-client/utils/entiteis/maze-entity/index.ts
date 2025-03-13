@@ -10,7 +10,13 @@ import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
 export class MazeEntity extends AbstractBodyEntity {
   static get FLOOR() {
     return {
-      polDensity: 5,
+      segmentsDensity: 5,
+    };
+  }
+
+  static get WALL() {
+    return {
+      segmentsDensity: 5, 
     };
   }
 
@@ -28,6 +34,10 @@ export class MazeEntity extends AbstractBodyEntity {
       //   view.add(MazeEntity.createWall(model.getBody().collider(i)));
       //   return;
       // }
+      // if (type === MazeBody.BODY_PARTS.boundary) {
+      //   view.add(MazeEntity.createBoundary(model.getBody().collider(i)));
+      //   return;
+      // }
       view.add(UnknownBodyEntity.createFromCollider(model.getBody().collider(i)));
     });
 
@@ -35,28 +45,51 @@ export class MazeEntity extends AbstractBodyEntity {
   }
 
   static createFloor(collider: Rapier3D.Collider) {
-    const buboid = collider.shape as Rapier3D.Cuboid;
+    const сuboid = collider.shape as Rapier3D.Cuboid;
 
-    const w = buboid.halfExtents.x * 2;
-    const d = buboid.halfExtents.z * 2;
+    const w = сuboid.halfExtents.x * 2;
+    const d = сuboid.halfExtents.z * 2;
 
     const floorGeometry = new THREE.PlaneGeometry(
       w,
       d,
-      w * MazeEntity.FLOOR.polDensity,
-      d * MazeEntity.FLOOR.polDensity,
+      w * MazeEntity.FLOOR.segmentsDensity,
+      d * MazeEntity.FLOOR.segmentsDensity,
     );
 
     // const floor = new THREE.Mesh(floorGeometry, grassMaterial); // TODO: uncomment me
     const floor = new THREE.Mesh(floorGeometry, unknownMaterial); // TODO: delete me
 
     AbstractBodyEntity.setViewPlacementFromCollider(floor, collider);
-    floor.position.y += buboid.halfExtents.y;
+    floor.position.y += сuboid.halfExtents.y;
 
     return floor;
   }
 
   static createWall(collider: Rapier3D.Collider) {
+    // TODO: write me: optimize geometry usage
+    const сuboid = collider.shape as Rapier3D.Cuboid;
+
+    const w = сuboid.halfExtents.x * 2;
+    const d = сuboid.halfExtents.z * 2;
+
+    const floorGeometry = new THREE.PlaneGeometry(
+      w,
+      d,
+      w * MazeEntity.FLOOR.segmentsDensity,
+      d * MazeEntity.FLOOR.segmentsDensity,
+    );
+
+    // const floor = new THREE.Mesh(floorGeometry, grassMaterial); // TODO: uncomment me
+    const floor = new THREE.Mesh(floorGeometry, unknownMaterial); // TODO: delete me
+
+    AbstractBodyEntity.setViewPlacementFromCollider(floor, collider);
+    floor.position.y += сuboid.halfExtents.y;
+
+    return floor;
+  }
+
+  static createBoundary(collider: Rapier3D.Collider) {
     // TODO: write me
   }
 }
