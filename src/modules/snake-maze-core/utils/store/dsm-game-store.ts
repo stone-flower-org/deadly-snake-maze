@@ -2,7 +2,7 @@ import { Store } from '@stone-flower-org/js-utils';
 
 import { DSMError, DSMStoreError } from '@/src/modules/snake-maze-core/utils/errors';
 
-import { BodyModel, IBodyState, IParticipantState, ISpaceState, ParticipantModel, SpaceModel } from './models';
+import { BodyModel, BodyMolecule, IBodyState, IParticipantState, ISpaceState, ParticipantModel, SpaceModel } from './models';
 
 export enum DSMGameStatus {
   pending = 'pending',
@@ -24,7 +24,7 @@ export type IQueryFunc<M> = (model: M) => IQueryFuncResult;
 export interface DSMGameState {
   bodies: Record<IBodyState['id'], IBodyState>;
   bodyIds: Set<IBodyState['id']>;
-  bodiesByRigidBodyId: Record<IBodyState['rigidBodyId'], IBodyState['id']>; // searching optimization
+  bodiesBySpaceId: Record<ISpaceState['id'], Set<IBodyState['id']>>;
 
   participants: Record<IParticipantState['id'], IParticipantState>;
   participantIds: Set<IParticipantState['id']>;
@@ -39,7 +39,7 @@ export interface DSMGameState {
 export const initialDSMState: DSMGameState = {
   bodies: {},
   bodyIds: new Set(),
-  bodiesByRigidBodyId: {},
+  bodiesBySpaceId: {},
 
   participants: {},
   participantIds: new Set(),
@@ -75,10 +75,10 @@ export class DSMGameStore extends Store<DSMGameState> {
       const state = this.getState().bodies[id];
       if (!state) throw new DSMError(`Couldn't find body ${id}`);
 
-      const [rigidBody] = this.getSpaceRegidBodies(state.spaceId, [state.rigidBodyId]);
+      const molecules = this.getSpaceRegidBodies(state.spaceId, state.moleculeIds).map((rigidBody) => new BodyMolecule({ rigidBody }));
 
       return new BodyModel({
-        rigidBody,
+        molecules,
         isNew: false,
         state,
       });
@@ -95,20 +95,15 @@ export class DSMGameStore extends Store<DSMGameState> {
     });
   }
 
-  getBodiesByRigidBodyIds(rigidBodyIds: IBodyState['rigidBodyId'][]) {
-    return rigidBodyIds.map((rigidBodyId) => {
-      const bodyId = this.getState().bodiesByRigidBodyId[rigidBodyId];
-      return this.getBodies([bodyId])[0];
-    });
-  }
-
   saveBodies(entities: BodyModel[]) {
     this.setState((state) => {
       entities.forEach((entity) => {
         entity.setIsNew(false);
         state.bodies[entity.getId()] = entity.getState();
         state.bodyIds.add(entity.getId());
-        state.bodiesByRigidBodyId[entity.getState().rigidBodyId] = entity.getId();
+        
+        if (!state.bodiesBySpaceId[entity.getState().spaceId]) state.bodiesBySpaceId[entity.getState().spaceId] = new Set();
+        state.bodiesBySpaceId[entity.getState().spaceId].add(entity.getId());
       });
       return state;
     });
@@ -120,10 +115,10 @@ export class DSMGameStore extends Store<DSMGameState> {
         const [body] = this.getBodies([id]);
         const [space] = this.getSpaces([body.getState().spaceId]);
 
-        space.getWorld().removeRigidBody(body.getBody());
+        body.getMolecules().forEach((molecule) => space.getWorld().removeRigidBody(molecule.getBody()));
         state.bodyIds.delete(body.getId());
-        delete state.bodiesByRigidBodyId[body.getState().rigidBodyId];
         delete state.bodies[body.getId()];
+        state.bodiesBySpaceId[space.getId()]?.delete(id);
       });
       return state;
     });
@@ -217,7 +212,7 @@ export class DSMGameStore extends Store<DSMGameState> {
     return rigidBodyIds.map((id) => {
       const rigidBody = space.getWorld().getRigidBody(id);
 
-      if (!rigidBody) throw new DSMError(`Couldn't find collider ${id}`);
+      if (!rigidBody) throw new DSMError(`Couldn't find rigid body ${id}`);
 
       return rigidBody;
     });
@@ -235,6 +230,8 @@ export class DSMGameStore extends Store<DSMGameState> {
         entity.setIsNew(false);
         state.spaces[entity.getId()] = entity.getState();
         state.spaceIds.add(entity.getId());
+        
+        if (!state.bodiesBySpaceId[entity.getId()]) state.bodiesBySpaceId[entity.getId()] = new Set();
       });
       return state;
     });
@@ -243,11 +240,7 @@ export class DSMGameStore extends Store<DSMGameState> {
   removeSpaces(ids: ISpaceState['id'][]) {
     this.setState((state) => {
       ids.forEach((id) => {
-        state.spaces[id]?.world.forEachRigidBody((rigidBody) => {
-          const bodyId = state.bodiesByRigidBodyId[rigidBody.handle];
-
-          if (bodyId === undefined) return;
-
+        state.bodiesBySpaceId[id]?.forEach((bodyId) => {
           this.removeBodies([bodyId]);
         });
 

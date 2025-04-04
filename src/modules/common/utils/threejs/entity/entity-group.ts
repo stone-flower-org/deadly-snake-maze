@@ -6,13 +6,17 @@ import { IView } from './entity';
 import { IEntityCollection } from './entity-collection';
 import { EntityGroupCollection } from './entity-group-collection';
 
+export interface IEntityGroupParams {
+  view?: IView;
+}
+
 export class EntityGroup extends AbstractEntity {
   protected _view: IView;
   protected _entities: IEntityCollection;
 
-  constructor() {
+  constructor({ view }: IEntityGroupParams = {}) {
     super();
-    this._view = new THREE.Group();
+    this._view = view ?? new THREE.Group();
     this._entities = new EntityGroupCollection({ view: this._view });
   }
 

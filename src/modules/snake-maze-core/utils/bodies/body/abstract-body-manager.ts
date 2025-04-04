@@ -5,10 +5,6 @@ export interface IAbstractBodyManagerParams {
   app: DSMGame;
 }
 
-export type IBodyUserData<T extends object = object> = T & {
-  bodyParts: string[];
-};
-
 export abstract class AbstractBodyManager<E extends BodyModel> {
   protected _app: DSMGame;
 

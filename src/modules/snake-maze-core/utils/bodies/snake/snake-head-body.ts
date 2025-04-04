@@ -1,6 +1,6 @@
 import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
 
-export class SnakeBody extends BodyModel {
+export class SnakeHeadBody extends BodyModel {
   static get MOLECULES() {
     return {
       head: {

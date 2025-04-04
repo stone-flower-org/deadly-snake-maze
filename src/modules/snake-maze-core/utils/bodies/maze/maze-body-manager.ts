@@ -1,7 +1,7 @@
 import { eulerToQuaternion, Rapier3D } from '@/src/modules/common/utils/rapier';
 import { AbstractBodyManager } from '@/src/modules/snake-maze-core/utils/bodies/body';
 import { PhysicsEngine } from '@/src/modules/snake-maze-core/utils/physics-engine';
-import { SpaceModel } from '@/src/modules/snake-maze-core/utils/store';
+import { BodyMolecule, SpaceModel } from '@/src/modules/snake-maze-core/utils/store';
 
 import { MazeBody } from './maze-body';
 import { MazeGraph, MazeGraphGenerator } from './maze-graph-generator';
@@ -24,14 +24,15 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
       position: _params.position ?? this._app.getService('physicsEngine').originPosition,
     };
 
-    const rigidBody = this._createRigidBody(params);
+    const rootMolecule = this._createRootMolecule(params);
 
     const model = new MazeBody({
-      rigidBody,
+      molecules: [rootMolecule],
       state: {
         id: MazeBody.generateId(),
         type: MazeBody.generateType(),
-        rigidBodyId: rigidBody.handle,
+        rootMoleculeId: rootMolecule.getId(),
+        moleculeIds: [rootMolecule.getId()],
         spaceId: params.space.getId(),
       },
     });
@@ -47,7 +48,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     return model;
   }
 
-  protected _createRigidBody(params: Required<CreateMazeParams>) {
+  protected _createRootMolecule(params: Required<CreateMazeParams>) {
     const { space, rotation, position } = params;
     const world = space.getWorld();
     const Rapier = this._app.getService('physicsEngine').getRapier();
@@ -56,7 +57,12 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     rigidBody.setRotation(rotation, false);
     rigidBody.setTranslation(position, false);
 
-    return rigidBody;
+    const molecule = new BodyMolecule({
+      rigidBody,
+      type: MazeBody.MOLECULES.root.type,
+    });
+
+    return molecule;
   }
 
   protected _createMazeGraph({ cells }: Required<CreateMazeParams>) {
@@ -103,7 +109,6 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
 
   protected _addMazeCellRightWall(body: MazeBody, params: Required<CreateMazeParams>, [x, y]: [number, number]) {
     const { space } = params;
-    const Rapier = this._app.getService('physicsEngine').getRapier();
     const world = space.getWorld();
 
     // Origin Position
@@ -124,7 +129,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     // Rotation
     wallDesc.setRotation(eulerToQuaternion({ x: 0, y: Math.PI / 2, z: 0 }));
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.wall, world.createCollider(wallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(wallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.wall.type);
   }
 
   protected _addMazeCellBottomtWall(body: MazeBody, params: Required<CreateMazeParams>, [x, y]: [number, number]) {
@@ -145,7 +150,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     wallDesc.translation.y = oY + wallShape.halfExtents.y;
     wallDesc.translation.z = oZ - zOffset;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.wall, world.createCollider(wallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(wallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.wall.type);
   }
 
   protected _addFloor(body: MazeBody, params: Required<CreateMazeParams>) {
@@ -154,7 +159,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     const world = space.getWorld();
 
     const hfw = this._calcFloorSize(params) / 2;
-    const hfh = MazeBody.FLOOR.h / 2;
+    const hfh = MazeBody.ATOMS.floor.size.h / 2;
 
     const floorDesc = Rapier.ColliderDesc.cuboid(hfw, hfh, hfw);
     floorDesc.translation.x = 0;
@@ -163,7 +168,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
 
     floorDesc.setRotation(eulerToQuaternion({ x: -Math.PI / 2, y: 0, z: 0 }));
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.floor, world.createCollider(floorDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(floorDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.floor.type);
   }
 
   protected _addBoundaries(body: MazeBody, params: Required<CreateMazeParams>) {
@@ -176,7 +181,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
 
     const fw = this._calcFloorSize(params);
     const hww = fw / 2;
-    const hwh = MazeBody.WALL.h / 2;
+    const hwh = MazeBody.ATOMS.wall.size.h / 2;
 
     const createBoundary = () => Rapier.ColliderDesc.cuboid(hww, hwh, hwh);
 
@@ -187,7 +192,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     tWallDesc.translation.y = oY + hwh;
     tWallDesc.translation.z = oZ + hwh;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.boundary, world.createCollider(tWallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(tWallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.boundary.type);
 
     // Right wall
     const rWallDesc = createBoundary();
@@ -198,7 +203,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
 
     rWallDesc.setRotation(eulerToQuaternion({ x: 0, y: Math.PI / 2, z: 0 }));
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.boundary, world.createCollider(rWallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(rWallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.boundary.type);
 
     // Bottom wall
     const bWallDesc = createBoundary();
@@ -207,7 +212,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     bWallDesc.translation.y = oY + hwh;
     bWallDesc.translation.z = oZ - fw - hwh;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.boundary, world.createCollider(bWallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(bWallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.boundary.type);
 
     // Left wall
     const lWallDesc = createBoundary();
@@ -218,7 +223,7 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
 
     lWallDesc.setRotation(eulerToQuaternion({ x: 0, y: Math.PI / 2, z: 0 }));
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.boundary, world.createCollider(lWallDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(lWallDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.boundary.type);
   }
 
   protected _addMazeExit(body: MazeBody, params: Required<CreateMazeParams>, cell: [number, number]) {
@@ -227,16 +232,16 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     const world = space.getWorld();
 
     const [oX, oY, oZ] = this._calcMazeCellOrigin(params, cell);
-    const offset = (MazeBody.CELL.w) / 2;
+    const offset = (MazeBody.ATOMS.cell.size.w) / 2;
 
-    const exitDesc = Rapier.ColliderDesc.cuboid(MazeBody.EXIT.l, MazeBody.EXIT.h, MazeBody.EXIT.w);
+    const exitDesc = Rapier.ColliderDesc.cuboid(MazeBody.ATOMS.exit.size.l, MazeBody.ATOMS.exit.size.h, MazeBody.ATOMS.exit.size.w);
     const exitShape = exitDesc.shape as Rapier3D.Cuboid;
 
     exitDesc.translation.x = oX + offset;
     exitDesc.translation.y = oY + exitShape.halfExtents.y;
     exitDesc.translation.z = oZ - offset;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.exit, world.createCollider(exitDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(exitDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.exit.type);
   }
 
   protected _addMazeHunterSpawn(body: MazeBody, params: Required<CreateMazeParams>, cell: [number, number]) {
@@ -245,16 +250,16 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     const world = space.getWorld();
 
     const [oX, oY, oZ] = this._calcMazeCellOrigin(params, cell);
-    const offset = (MazeBody.CELL.w) / 2;
+    const offset = (MazeBody.ATOMS.cell.size.w) / 2;
 
-    const hunterSpawnDesc = Rapier.ColliderDesc.cuboid(MazeBody.HUNTER_SPAWN.l, MazeBody.HUNTER_SPAWN.h, MazeBody.HUNTER_SPAWN.w);
+    const hunterSpawnDesc = Rapier.ColliderDesc.cuboid(MazeBody.ATOMS.hunterSpawn.size.l, MazeBody.ATOMS.hunterSpawn.size.h, MazeBody.ATOMS.hunterSpawn.size.w);
     const hunterSpawnShape = hunterSpawnDesc.shape as Rapier3D.Cuboid;
 
     hunterSpawnDesc.translation.x = oX + offset;
     hunterSpawnDesc.translation.y = oY + hunterSpawnShape.halfExtents.y;
     hunterSpawnDesc.translation.z = oZ - offset;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.hunterSpawn, world.createCollider(hunterSpawnDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(hunterSpawnDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.hunterSpawn.type);
   }
 
   protected _addMazePreySpawn(body: MazeBody, params: Required<CreateMazeParams>, cell: [number, number]) {
@@ -263,24 +268,24 @@ export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
     const world = space.getWorld();
 
     const [oX, oY, oZ] = this._calcMazeCellOrigin(params, cell);
-    const offset = (MazeBody.CELL.w) / 2;
+    const offset = (MazeBody.ATOMS.cell.size.w) / 2;
 
-    const preySpawnDesc = Rapier.ColliderDesc.cuboid(MazeBody.PREY_SPAWN.l, MazeBody.PREY_SPAWN.h, MazeBody.PREY_SPAWN.w);
+    const preySpawnDesc = Rapier.ColliderDesc.cuboid(MazeBody.ATOMS.preySpawn.size.l, MazeBody.ATOMS.preySpawn.size.h, MazeBody.ATOMS.preySpawn.size.w);
     const preySpawnShape = preySpawnDesc.shape as Rapier3D.Cuboid;
 
     preySpawnDesc.translation.x = oX + offset;
     preySpawnDesc.translation.y = oY + preySpawnShape.halfExtents.y;
     preySpawnDesc.translation.z = oZ - offset;
 
-    body.registerBodyPart(MazeBody.BODY_PARTS.preySpawn, world.createCollider(preySpawnDesc, body.getBody()));
+    body.getRootMolecule()?.addAtom(world.createCollider(preySpawnDesc, body.getRootMolecule()?.getBody()), MazeBody.ATOMS.preySpawn.type);
   }
 
   protected _calcFloorSize({ cells }: Required<CreateMazeParams>) {
-    return MazeBody.CELL.w * cells + MazeBody.WALL.w * (cells - 1);
+    return MazeBody.ATOMS.cell.size.w * cells + MazeBody.ATOMS.wall.size.w * (cells - 1);
   }
 
   protected _calcWallSize(_: Required<CreateMazeParams>) {
-    return [MazeBody.CELL.w + MazeBody.WALL.w, MazeBody.WALL.h, MazeBody.WALL.w];
+    return [MazeBody.ATOMS.cell.size.w + MazeBody.ATOMS.wall.size.w, MazeBody.ATOMS.wall.size.h, MazeBody.ATOMS.wall.size.w];
   }
 
   protected _calcMazeOrigin(params: Required<CreateMazeParams>) {

@@ -1,79 +1,83 @@
-import { IBodyUserData } from '@/src/modules/snake-maze-core/utils/bodies/body';
-import { BodyModel } from '@/src/modules/snake-maze-core/utils/store';
+import { BodyModel, IRigidBodyUserData } from '@/src/modules/snake-maze-core/utils/store';
 
-export type IMazeBodyUserData = IBodyUserData;
+export type IMazeBodyUserData = IRigidBodyUserData;
 
 export class MazeBody extends BodyModel {
-  static get CELL() {
+  static get ATOMS() {
     return {
-      w: 5,
+      cell: {
+        type: 'maze_cell',
+        size: {
+          w: 5,
+        },
+      },
+      floor: {
+        type: 'maze_floor',
+        size: {
+          h: 0.1,
+        },
+      },
+      wall: {
+        type: 'maze_wall',
+        size: {
+          w: 1,
+          h: 1,
+        },
+      },
+      boundary: {
+        type: 'maze_boundary',
+        size: {
+          w: 1,
+          h: 1,
+        },
+      },
+      exit: {
+        type: 'maze_exit',
+        size: {
+          l: 1,
+          w: 1,
+          h: 0.1,
+        },
+      },
+      hunterSpawn: {
+        type: 'maze_hunterSpawn',
+        size: {
+          l: 1,
+          w: 1,
+          h: 0.1,
+        },
+      },
+      preySpawn: {
+        type: 'maze_preySpawn',
+        size: {
+          l: 1,
+          w: 1,
+          h: 0.1,
+        },
+      },
     };
-  }
+  };
 
-  static get FLOOR() {
+  static get MOLECULES() {
     return {
-      h: 0.1,
+      root: {
+        type: 'maze_root_molecule',
+        size: {
+          w: 5,
+        },
+      },
     };
-  }
-
-  static get WALL() {
-    return {
-      w: 1,
-      h: 1,
-    };
-  }
-
-  static get BOUNDARY() {
-    return {
-      w: 1,
-      h: 1,
-    };
-  }
-
-  static get EXIT() {
-    return {
-      l: 1,
-      w: 1,
-      h: 0.1,
-    };
-  }
-
-  static get HUNTER_SPAWN() {
-    return {
-      l: 1,
-      w: 1,
-      h: 0.1,
-    };
-  }
-
-  static get PREY_SPAWN() {
-    return {
-      l: 1,
-      w: 1,
-      h: 0.1,
-    };
-  }
-
-  static get BODY_PARTS() {
-    return {
-      boundary: 'boundary',
-      exit: 'exit',
-      floor: 'floor',
-      hunterSpawn: 'hunterSpawn',
-      preySpawn: 'preySpawn',
-      wall: 'wall',
-    };
-  }
-
+  };
+  
   getExit() {
-    return this.findColliderByBodyPart(MazeBody.BODY_PARTS.exit);
+    return this.getRootMolecule()?.findAtomByType(MazeBody.ATOMS.exit.type);
   }
 
   getPreySpawn() {
-    return this.findColliderByBodyPart(MazeBody.BODY_PARTS.preySpawn);
+    return this.getRootMolecule()?.findAtomByType(MazeBody.ATOMS.exit.type);
   }
 
   getHunterSpawn() {
-    return this.findColliderByBodyPart(MazeBody.BODY_PARTS.hunterSpawn);
+    return this.getRootMolecule()?.findAtomByType(MazeBody.ATOMS.hunterSpawn.type);
   }
 }

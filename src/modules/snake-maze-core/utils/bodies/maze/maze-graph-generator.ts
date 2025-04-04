@@ -29,7 +29,7 @@ export class MazeGraphGenerator {
 
     const mazeGraph = this._makeMazeGraph(params);
 
-    // this._randomizeWalls(params, mazeGraph); // TODO: uncomment me
+    this._randomizeWalls(params, mazeGraph);
 
     this._randomizeSpawnNExit(params, mazeGraph);
 

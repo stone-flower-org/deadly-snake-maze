@@ -1,23 +1,28 @@
 import { type ITick, TouchedMap } from '@stone-flower-org/js-utils';
 
 import { DSMApp } from '@/src/modules/snake-maze-client/utils/dsm-app';
-import { AbstractBodyEntity } from '@/src/modules/snake-maze-client/utils/entiteis';
+import { AbstractBodyEntity, ChickenEntity, MazeEntity, SnakeEntity, UnknownEntity } from '@/src/modules/snake-maze-client/utils/entiteis';
 import { DSMMainScene } from '@/src/modules/snake-maze-client/utils/scenes';
 import { SpaceModel } from '@/src/modules/snake-maze-core/utils/store';
 
-import { EntityFactory } from './entity-factory';
+import { EntityMap } from './entity-map';
 
 export interface ISceneRendererParams {
   app: DSMApp;
 }
 
 export class SceneRenderer {
-  _app: DSMApp;
-  _renderState = new TouchedMap<number, AbstractBodyEntity>();
-  _entityFactory = new EntityFactory();
+  protected _app: DSMApp;
+  protected _renderState = new TouchedMap<number, AbstractBodyEntity>();
+  protected _entityMap = new EntityMap();
 
   constructor({ app }: ISceneRendererParams) {
     this._app = app;
+    this._registerEntities();
+  }
+
+  getEntityMap() {
+    return this._entityMap;
   }
 
   render(tick: ITick) {
@@ -57,23 +62,30 @@ export class SceneRenderer {
         let entity = this._renderState.get(body.getId());
 
         if (!entity) {
-          entity = this._entityFactory.createEntiryFromBodyModel(body);
+          entity = this._entityMap.resolveOrUse(body.getType(), UnknownEntity.ENTITIES.unknownModel)(body);
 
           scene.getWorldEntity().getEntitiesCollection().addEntities([entity]);
 
           this._renderState.set(body.getId(), entity);
         }
 
-        this._renderState.touch(body.getId(), true);
+        entity.updateFromBody(tick, body);
 
-        entity.updateFromBodyModel(tick, body);
+        this._renderState.touch(body.getId(), true);
       });
 
     this._renderState.forEachUntouched((entity, bodyId) => {
       this._renderState.delete(bodyId);
-      entity.delete();
+      scene.getWorldEntity().getEntitiesCollection().deleteEntities([entity.id]);
     });
 
     scene.update(tick);
+  }
+
+  protected _registerEntities() {
+    UnknownEntity.registerEntity(this);
+    ChickenEntity.registerEntity(this);
+    MazeEntity.registerEntity(this);
+    SnakeEntity.registerEntity(this);
   }
 }
