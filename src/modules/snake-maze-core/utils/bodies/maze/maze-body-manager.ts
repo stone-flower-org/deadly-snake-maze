@@ -1,7 +1,8 @@
 import { eulerToQuaternion, Rapier3D } from '@/src/modules/common/utils/rapier';
 import { AbstractBodyManager } from '@/src/modules/snake-maze-core/utils/bodies/body';
 import { PhysicsEngine } from '@/src/modules/snake-maze-core/utils/physics-engine';
-import { BodyMolecule, SpaceModel } from '@/src/modules/snake-maze-core/utils/store';
+import { BodyMolecule, IQueryFuncResult, SpaceModel } from '@/src/modules/snake-maze-core/utils/store';
+import { DSMError } from '@/src/modules/snake-maze-core/utils/errors';
 
 import { MazeBody } from './maze-body';
 import { MazeGraph, MazeGraphGenerator } from './maze-graph-generator';
@@ -15,6 +16,16 @@ export interface CreateMazeParams {
 
 export class MazeBodyManager extends AbstractBodyManager<MazeBody> {
   protected _mazeGraphGenerator = new MazeGraphGenerator();
+
+  findMazeBody() {
+    const [mazeBody] = this._app
+      .getStore()
+      .queryBodies((body) =>
+        body.getState().type === MazeBody.generateType() ? IQueryFuncResult.includeNExit : IQueryFuncResult.exclude,
+      );
+    if (!mazeBody) throw new DSMError('Maze space is not found');
+    return mazeBody as MazeBody;
+  }
 
   create(_params: CreateMazeParams) {
     const params = {

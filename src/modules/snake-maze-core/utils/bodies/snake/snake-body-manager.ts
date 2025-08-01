@@ -16,20 +16,12 @@ export class SnakeBodyManager extends AbstractBodyManager<SnakeBody> {
     // TODO: write me
     const params = {
       ..._params,
-      segments: _params.segments ?? 2,
+      segments: _params.segments ?? 3,
       rotation: _params.rotation ?? this._app.getService('physicsEngine').originRotation,
       position: _params.position ?? this._app.getService('physicsEngine').originPosition,
     };
 
     const head = this._createHeadMolecule(params);
-
-    // id: number;
-    // type: string;
-    // rootMoleculeId?: number;
-    // moleculeIds: number[];
-    // spaceId: number;
-
-    // molecules: BodyMolecule[];
 
     const model = new SnakeBody({
       molecules: [head],
@@ -48,14 +40,11 @@ export class SnakeBodyManager extends AbstractBodyManager<SnakeBody> {
   }
 
   protected _createHeadMolecule(params: Required<CreateSnakeParams>) {
-    const { space, rotation, position: oPosition } = params;
+    const { space, rotation, position } = params;
     const world = space.getWorld();
     const Rapier = this._app.getService('physicsEngine').getRapier();
 
-    const position = { ...oPosition };
-    position.y += SnakeBody.MOLECULES.head.size.h;
-
-    const rigidBody = world.createRigidBody(Rapier.RigidBodyDesc.fixed());
+    const rigidBody = world.createRigidBody(Rapier.RigidBodyDesc.dynamic());
     rigidBody.setRotation(rotation, false);
     rigidBody.setTranslation(position, false);
 
@@ -64,13 +53,19 @@ export class SnakeBodyManager extends AbstractBodyManager<SnakeBody> {
       type: SnakeBody.MOLECULES.head.type,
     });
 
-    const shape = Rapier.ColliderDesc.cuboid(SnakeBody.MOLECULES.head.size.w, SnakeBody.MOLECULES.head.size.h, SnakeBody.MOLECULES.head.size.l);
-    headMolecule.addAtom(world.createCollider(shape, rigidBody), SnakeBody.ATOMS.root.type);
+    const shape = Rapier.ColliderDesc.ball(SnakeBody.ATOMS.head.size.r);
+    shape.translation.y += SnakeBody.ATOMS.head.size.r;
+
+    headMolecule.addAtom(world.createCollider(shape, rigidBody), SnakeBody.ATOMS.head.type);
 
     return headMolecule;
   }
 
-  protected _addSegments(params: Required<CreateSnakeParams>) {
+  protected _addSegments(body: SnakeBody, params: Required<CreateSnakeParams>) {
+    // TODO: write me
+  }
+
+  protected _addTail(body: SnakeBody, params: Required<CreateSnakeParams>) {
     // TODO: write me
   }
 }

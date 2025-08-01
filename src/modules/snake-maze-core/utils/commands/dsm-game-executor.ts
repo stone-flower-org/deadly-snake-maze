@@ -63,8 +63,6 @@ export class DSMGameExecutor extends AbstractExecutor {
   execDSMInitGameCommand(c: DSMInitGameCommand) {
     // TODO: write me
     /*
-    create maze
-    create race
     add bots
     */
     const { mazeCells } = c.payload;
@@ -86,10 +84,14 @@ export class DSMGameExecutor extends AbstractExecutor {
 
   execDSMJoinCommand(_: DSMJoinCommand): DSMJoinCommandResult {
     const mazeSpace = this._game.getService('mazeSpaceManager').findMazeSpace();
+    const mazeBody = this._game.getService('mazeBodyManager').findMazeBody();
 
     const player = this._game.getService('playerManager').create({
       space: mazeSpace,
     });
+
+    // TODO: think how to spawn player at certain point
+    // mazeBody.getHunterSpawn();
 
     return { id: player.getId() };
   }
