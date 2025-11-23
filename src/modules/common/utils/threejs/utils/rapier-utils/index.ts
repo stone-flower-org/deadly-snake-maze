@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
+import { Rapier3D } from '@/src/modules/common/utils/rapier';
 import { IView } from '@/src/modules/common/utils/threejs/entity';
 import { Object3DUtils } from '@/src/modules/common/utils/threejs/utils/object3d-utils';
-import { Rapier3D } from '@/src/modules/common/utils/rapier';
 
 // TODO: keep as part of the common modules
 export class RapeirUtils {
@@ -35,5 +35,5 @@ export class RapeirUtils {
 
     const positions = collider.translation();
     view.position.set(positions.x, positions.y, -positions.z);
-  }  
+  }
 }

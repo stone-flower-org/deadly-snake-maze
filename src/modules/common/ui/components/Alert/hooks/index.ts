@@ -1,2 +1,2 @@
-export * from './use-alert-context';
 export * from './use-alert';
+export * from './use-alert-context';

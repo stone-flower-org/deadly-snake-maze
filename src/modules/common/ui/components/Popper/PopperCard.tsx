@@ -1,19 +1,19 @@
 import { ClickAwayListener } from '@mui/material';
 import React, {
+  cloneElement,
   FC,
   HTMLProps,
   ReactElement,
   MouseEvent as ReactMouseEvent,
   ReactNode,
-  cloneElement,
   useRef,
   useState,
 } from 'react';
 
 import { useControlledState } from '@/src/modules/common/ui/hooks';
 
-import { Popper, PopperProps } from './Popper';
 import { DEFAULT_POPPER_CARD_PROPS } from './constants';
+import { Popper, PopperProps } from './Popper';
 import { StyledContent } from './styles';
 
 export interface PopperCardProps {

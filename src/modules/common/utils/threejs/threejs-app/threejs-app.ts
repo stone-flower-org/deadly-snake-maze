@@ -1,12 +1,12 @@
 import {
   App,
-  ServiceProvider,
-  type IDefaultContainerServices,
-  type IValidContainerServices,
-  type IServiceProvider,
   type IAppOptions,
+  type IDefaultContainerServices,
+  type IServiceProvider,
+  type IValidContainerServices,
+  ServiceProvider,
 } from '@stone-flower-org/js-app';
-import { TickingClock, WithEventProducer, type IWithEventProducer } from '@stone-flower-org/js-utils';
+import { type IWithEventProducer, TickingClock, WithEventProducer } from '@stone-flower-org/js-utils';
 
 import { IRenderer, Renderer } from '@/src/modules/common/utils/threejs/renderer';
 import { ISimulation } from '@/src/modules/common/utils/threejs/simulation';

@@ -1,5 +1,5 @@
 import { SvgIconProps as BaseSvgIconProps } from '@mui/material';
-import { createElement, CSSProperties, ElementType, FC } from 'react';
+import { CSSProperties, createElement, ElementType, FC } from 'react';
 
 import { StyledIcon } from './styles';
 

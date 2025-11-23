@@ -1,6 +1,5 @@
-import React, { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
-
 import type { Progress } from '@stone-flower-org/js-utils';
+import React, { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
 export interface AppBootProviderValue {
   progress: Progress;

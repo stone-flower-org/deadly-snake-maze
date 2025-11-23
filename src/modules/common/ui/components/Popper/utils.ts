@@ -15,12 +15,7 @@ export const makeFlipModifier = (options: { fallbackPlacements?: string[] } = {}
 });
 
 export const makePreventOverflowModifier = (
-  options: {
-    boundary?: Element;
-    tether?: boolean;
-    tetherOffset?: TetherOffset;
-    padding?: number;
-  } = {},
+  options: { boundary?: Element; tether?: boolean; tetherOffset?: TetherOffset; padding?: number } = {},
 ) => ({
   name: 'preventOverflow',
   options,

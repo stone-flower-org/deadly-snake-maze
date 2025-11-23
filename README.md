@@ -1,8 +1,8 @@
-# Deadly Snake Maze
+# Deadly Maze
 
 ## Description
 
-Deadly Snake Maze is a 3D browser game written using Three.js
+Deadly Maze is a 3D browser game written using Three.js
 
 ## Installation
 
@@ -75,15 +75,15 @@ Removes generated report files from project's folder
 
 ### yarn lint
 
-Checks all source files according to eslint configs
+Checks all source files according to linter configs
 
 ### yarn lint:format
 
-Formats all source files according to eslint configs
+Formats all source files according to linter configs
 
 ### yarn lint:staged
 
-Checks staged source files according to eslint configs
+Checks staged source files according to linter configs
 
 ### yarn start
 

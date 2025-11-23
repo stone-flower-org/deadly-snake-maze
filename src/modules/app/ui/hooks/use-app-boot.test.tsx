@@ -1,4 +1,4 @@
-import { createProgress } from '@stone-flower-org/js-utils';
+import { Progress } from '@stone-flower-org/js-utils';
 import { renderHook } from '@testing-library/react';
 import React from 'react';
 
@@ -10,7 +10,7 @@ import { useAppBoot } from './use-app-boot';
 
 const renderUseAppBootWithProviders = (renderProps: RenderHookOptions = {}) =>
   renderHook(() => useAppBoot(), {
-    wrapper: ({ children }) => <AppBootProvider progress={createProgress()}>{children}</AppBootProvider>,
+    wrapper: ({ children }) => <AppBootProvider progress={Progress.create()}>{children}</AppBootProvider>,
     ...renderProps,
   });
 

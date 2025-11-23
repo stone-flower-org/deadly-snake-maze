@@ -1,4 +1,4 @@
-import { createProgress } from '@stone-flower-org/js-utils';
+import { Progress } from '@stone-flower-org/js-utils';
 import { render, renderHook } from '@testing-library/react';
 import React from 'react';
 
@@ -19,7 +19,7 @@ const renderConfigsProvider = (componentProps: Partial<AppBootProviderProps> = {
   return render(
     <AppBootProvider
       {...props}
-      progress={props.progress ?? createProgress()}
+      progress={props.progress ?? Progress.create()}
     />,
     renderProps,
   );
@@ -34,7 +34,7 @@ const renderWithValueOut = (componentProps: Partial<AppBootProviderProps> = {}) 
     wrapper: ({ children }) => (
       <AppBootProvider
         {...props}
-        progress={props.progress ?? createProgress()}
+        progress={props.progress ?? Progress.create()}
       >
         {children}
       </AppBootProvider>

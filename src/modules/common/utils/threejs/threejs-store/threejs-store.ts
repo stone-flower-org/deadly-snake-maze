@@ -1,4 +1,4 @@
-import { WithEventProducer, type IEventProducer } from '@stone-flower-org/js-utils';
+import { type IEventProducer, WithEventProducer } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
 import { IRenderableScene } from '@/src/modules/common/utils/threejs/scene';

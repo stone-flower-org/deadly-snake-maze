@@ -1,1 +1,1 @@
-export type * as Rapier3D from '@dimforge/rapier3d';
+export { type default as Rapier3D } from '@dimforge/rapier3d';

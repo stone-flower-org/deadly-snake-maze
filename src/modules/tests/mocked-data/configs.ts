@@ -1,6 +1,5 @@
-import { inject } from 'vitest';
-
 import type { RecursivePartial } from '@stone-flower-org/js-utils';
+import { inject } from 'vitest';
 
 const DEFAULT_CONFIGS = inject('CONFIGS');
 

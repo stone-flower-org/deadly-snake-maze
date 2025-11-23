@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 export type CommonLayoutProps = PropsWithChildren;
 
-export const CommonLayout = ({ children }: CommonLayoutProps) => children;
+export const CommonLayout = ({ children }: CommonLayoutProps) => <>{children}</>;

@@ -1,4 +1,4 @@
-import { waitFor, renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 
 import { RenderHookOptions } from '@/src/modules/tests/types';

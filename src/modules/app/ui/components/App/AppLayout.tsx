@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, useEffect } from 'react';
 
-import { useErrorHandler, useAppErrors, useAppBoot } from '@/src/modules/app/ui/hooks';
+import { useAppBoot, useAppErrors, useErrorHandler } from '@/src/modules/app/ui/hooks';
 import { AlertBar } from '@/src/modules/common/ui/components/Alert';
 import { useAlertContext } from '@/src/modules/common/ui/components/Alert/hooks';
 

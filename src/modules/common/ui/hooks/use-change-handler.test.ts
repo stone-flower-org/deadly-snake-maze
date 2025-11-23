@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { RenderHookOptions } from '@/src/modules/tests/types';
 import { renderHook } from '@/src/modules/tests/utils';
 
-import { useChangeHandler, UseChangeHandlerParams } from './use-change-handler';
+import { UseChangeHandlerParams, useChangeHandler } from './use-change-handler';
 
 const defaultObject = {
   key0: 'some val 0',

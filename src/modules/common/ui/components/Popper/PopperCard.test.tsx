@@ -4,8 +4,8 @@ import { vi } from 'vitest';
 
 import { renderWithProviders, setupAndBootApp } from '@/src/modules/tests/utils';
 
-import { PopperCard, PopperCardProps } from './PopperCard';
 import { DEFAULT_POPPER_CARD_PROPS } from './constants';
+import { PopperCard, PopperCardProps } from './PopperCard';
 
 const defaultButtonContent = 'Some Button Content';
 

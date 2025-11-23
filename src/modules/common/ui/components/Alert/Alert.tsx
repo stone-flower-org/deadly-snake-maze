@@ -4,12 +4,12 @@ import React, { FC, HTMLProps, useState } from 'react';
 import { AlertItem } from '@/src/modules/common/ui/components/Alert/types';
 
 import {
+  StyledAlertBody,
+  StyledAlertBtn,
   StyledAlertContainer,
   StyledAlertHeader,
   StyledAlertIcon,
   StyledAlertTitle,
-  StyledAlertBtn,
-  StyledAlertBody,
   StyledDisappearanceTimer,
 } from './styles';
 

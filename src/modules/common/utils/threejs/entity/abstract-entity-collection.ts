@@ -2,14 +2,15 @@ import {
   Collection,
   createAutoincrementIdGenerator,
   createContextSaver,
-  type ITick,
   type ICollection,
+  type ITick,
 } from '@stone-flower-org/js-utils';
 
 import { AbstractEntity } from './abstract-entity';
 import { IEntity } from './entity';
 import { IEntityCollection, IEntityCollectionOptions } from './entity-collection';
 
+// TODO: make Single Entity class with children class
 export class AbstractEntityCollection<E extends IEntity = IEntity> implements IEntityCollection<E> {
   public readonly id: number;
   protected _entities: ICollection<E, E['id']>;

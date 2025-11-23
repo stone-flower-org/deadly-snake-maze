@@ -1,9 +1,8 @@
 import { type IEventProducer, type ITick, WithEventProducer } from '@stone-flower-org/js-utils';
+import type { WebGLRendererParameters } from 'three';
 import * as THREE from 'three';
 
 import { IThreejsApp } from '@/src/modules/common/utils/threejs/threejs-app';
-
-import type { WebGLRendererParameters } from 'three';
 
 export type IRendererEngine = THREE.WebGLRenderer;
 

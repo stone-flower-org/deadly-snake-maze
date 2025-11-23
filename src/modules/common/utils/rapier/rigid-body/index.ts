@@ -1,4 +1,4 @@
-import { type RigidBody, type Collider } from '@dimforge/rapier3d';
+import { type Collider, type RigidBody } from '@dimforge/rapier3d';
 
 export const forEachColliderFromRigidBody = (body: RigidBody, callback: (collider: Collider) => boolean | void) => {
   const colliders = body.numColliders();

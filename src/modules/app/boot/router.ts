@@ -4,9 +4,9 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { NOT_FOUND_PAGE_ID } from '@/src/modules/app/constants/router';
 import { ThrowRouteError } from '@/src/modules/common/ui/components/ThrowRouteError';
 import { createRoutesStore } from '@/src/modules/common/utils/react-router-dom';
+import { routes as deadlyMazeClientRoutes } from '@/src/modules/deadly-maze-client/boot';
+import { routes as deadlyMazeDebugRoutes } from '@/src/modules/deadly-maze-debug/boot';
 import { routes as mainRoutes } from '@/src/modules/main/boot';
-import { routes as snakeMazeClientRoutes } from '@/src/modules/snake-maze-client/boot';
-import { routes as snakeMazeDebugRoutes } from '@/src/modules/snake-maze-debug/boot';
 
 export const routes: RouteObject[] = [
   {
@@ -19,11 +19,11 @@ export const routes: RouteObject[] = [
       },
       {
         path: '',
-        children: snakeMazeClientRoutes,
+        children: deadlyMazeClientRoutes,
       },
       {
         path: '',
-        children: snakeMazeDebugRoutes,
+        children: deadlyMazeDebugRoutes,
       }, // TODO: hide when not in development mode
       {
         id: NOT_FOUND_PAGE_ID,

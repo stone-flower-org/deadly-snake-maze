@@ -1,6 +1,5 @@
-import { isKeyOf } from '@stone-flower-org/js-utils';
-
 import type { Constructor } from '@stone-flower-org/js-utils';
+import { isKeyOf } from '@stone-flower-org/js-utils';
 import type { IUniform } from 'three';
 
 export type UniformAttrs = {

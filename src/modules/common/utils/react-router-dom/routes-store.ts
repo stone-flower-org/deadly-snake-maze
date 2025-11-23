@@ -2,8 +2,8 @@ import { RouteObject } from 'react-router-dom';
 
 import {
   createNamedRoutesMap,
-  generateFullPath as generateFullPath,
   FullPathParams,
+  generateFullPath as generateFullPath,
   NamedRoute,
   NamedRoutesMap,
 } from './utils';

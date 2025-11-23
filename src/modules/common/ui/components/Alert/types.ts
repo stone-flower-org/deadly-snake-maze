@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-
 import type { TimeoutId } from '@stone-flower-org/js-utils';
+import { ReactNode } from 'react';
 
 export enum AlertType {
   error = 'error',

@@ -23,9 +23,9 @@ configs/config.local.json
 !scripts
 !src
 !.dockerignore
-!.eslintrc.js
+!.editorconfig
 !.gitignore
-!.prettierrc.js
+!biome.json
 !Dockerfile
 !index.html
 !package.json

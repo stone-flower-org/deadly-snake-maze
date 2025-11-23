@@ -1,8 +1,8 @@
-import { clamp, createContextSaver, type TimeoutId, type ITick } from '@stone-flower-org/js-utils';
+import { clamp, createContextSaver, type ITick, type TimeoutId } from '@stone-flower-org/js-utils';
 import * as THREE from 'three';
 
 import { AbstractController, IThreejsApp } from '@/src/modules/common/utils/threejs';
-import { DSMSimulation } from '@/src/modules/snake-maze-client/utils/dsm-app';
+import { DSMSimulation } from '@/src/modules/deadly-maze-client/utils/dsm-app';
 
 export interface FlyingControllerConfigs {
   speed: number;

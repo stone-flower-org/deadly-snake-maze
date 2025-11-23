@@ -2,7 +2,7 @@ import React from 'react';
 
 import { routesStoreProvider } from '@/src/modules/app/boot';
 import { LogoIcon } from '@/src/modules/app/ui/Icons';
-import { SNAKE_MAZE_CLIENT_PAGE_ID } from '@/src/modules/snake-maze-client/constants';
+import { DEADLY_MAZE_CLIENT_PAGE_ID } from '@/src/modules/deadly-maze-client/constants';
 
 import { StyledButtonLink, StyledLogoBlock, StyledMenu, StyledMenuItem, StyledWrapper } from './styles';
 
@@ -18,7 +18,7 @@ export const MainMenu = ({ className }: MainMenuProps) => (
     <StyledMenu>
       <StyledMenuItem>
         <StyledButtonLink
-          to={routesStoreProvider.get().generateFullPathById(SNAKE_MAZE_CLIENT_PAGE_ID)}
+          to={routesStoreProvider.get().generateFullPathById(DEADLY_MAZE_CLIENT_PAGE_ID)}
           variant="contained"
         >
           Play

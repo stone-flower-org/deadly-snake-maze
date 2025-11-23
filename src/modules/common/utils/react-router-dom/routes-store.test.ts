@@ -120,14 +120,17 @@ describe('createRoutesStore', () => {
         },
         expectedResult: '/some/path/1/2?a=1&a=2&b=3',
       },
-    ])(
-      'should return full path from provided route id and path params',
-      ({ name, routes, id, params, expectedResult }) => {
-        it(`${name}`, () => {
-          const store = createRoutesStore(routes);
-          expect(store.generateFullPathById(id, params)).toBe(expectedResult);
-        });
-      },
-    );
+    ])('should return full path from provided route id and path params', ({
+      name,
+      routes,
+      id,
+      params,
+      expectedResult,
+    }) => {
+      it(`${name}`, () => {
+        const store = createRoutesStore(routes);
+        expect(store.generateFullPathById(id, params)).toBe(expectedResult);
+      });
+    });
   });
 });

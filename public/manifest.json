@@ -1,6 +1,6 @@
 {
-  "short_name": "DSM",
-  "name": "Deadly Snake Maze",
+  "short_name": "DM",
+  "name": "Deadly Maze",
   "icons": [
     {
       "src": "static/img/logo/favicon.ico",

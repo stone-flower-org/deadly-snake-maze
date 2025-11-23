@@ -1,7 +1,7 @@
 import {
-  createAsyncThunk as baseCreateAsyncThunk,
-  AsyncThunkPayloadCreator,
   AsyncThunkOptions,
+  AsyncThunkPayloadCreator,
+  createAsyncThunk as baseCreateAsyncThunk,
 } from '@reduxjs/toolkit';
 import { isKeyOf } from '@stone-flower-org/js-utils';
 

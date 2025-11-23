@@ -2,10 +2,10 @@ import { vi } from 'vitest';
 
 import {
   IntersectionObserverMock,
+  MutationObserverMock,
   makeIntersectionObserver,
   makeMutationObserver,
   makeResizeObeserver,
-  MutationObserverMock,
 } from '@/src/modules/tests/mocks';
 
 global.Element.prototype.scrollTo = vi.fn().mockReturnValue(undefined);

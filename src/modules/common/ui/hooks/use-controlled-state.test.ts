@@ -5,7 +5,7 @@ import { vi } from 'vitest';
 import { RenderHookOptions } from '@/src/modules/tests/types';
 import { renderHook } from '@/src/modules/tests/utils';
 
-import { useControlledState, UseControlledStateParams } from './use-controlled-state';
+import { UseControlledStateParams, useControlledState } from './use-controlled-state';
 
 const newState = { a: 'a' };
 const firedEvent = {};
